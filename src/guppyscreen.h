@@ -13,6 +13,7 @@
 #include "main_panel.h"
 #include "spoolman_panel.h"
 #include "websocket_client.h"
+#include "bedmesh_panel.h"
 
 class GuppyScreen {
  private:
@@ -30,6 +31,7 @@ class GuppyScreen {
 
   SpoolmanPanel spoolman_panel;
   MainPanel main_panel;
+  BedMeshPanel bedmesh_panel;
   InitPanel init_panel;
 
  public:
