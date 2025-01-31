@@ -6,14 +6,11 @@
 
 
 LV_IMG_DECLARE(extruder);
-LV_IMG_DECLARE(speed_up_img);
-LV_IMG_DECLARE(extrude);
 LV_IMG_DECLARE(clock_img);
 LV_IMG_DECLARE(hourglass);
 LV_IMG_DECLARE(bed);
 LV_IMG_DECLARE(home_z);
 LV_IMG_DECLARE(fan);
-LV_IMG_DECLARE(layers_img);
 
 LV_IMG_DECLARE(fine_tune_img);
 LV_IMG_DECLARE(pause_img);
@@ -57,10 +54,7 @@ PrintStatusPanel::PrintStatusPanel(KWebSocketClient &websocket_client,
   , detail_cont(lv_obj_create(status_cont))
   , extruder_temp(detail_cont, &extruder, 100, "20")
   , bed_temp(detail_cont, &bed, 100, "21")
-  , print_speed(detail_cont, &speed_up_img, 100, "0 mm/s")
   , z_offset(detail_cont, &home_z, 100, "0.0 mm")
-  , flow_rate(detail_cont, &extrude, 100, "0.0 mm3/s")
-  , layers(detail_cont, &layers_img, 100, "...")
   , fan0(detail_cont, &fan, 100, "0%")
   , elapsed(detail_cont, &clock_img, 100, "0s")
   , time_left(detail_cont, &hourglass, 100, "...")
@@ -81,25 +75,20 @@ PrintStatusPanel::PrintStatusPanel(KWebSocketClient &websocket_client,
   lv_obj_clear_flag(detail_cont, LV_OBJ_FLAG_SCROLLABLE);
   lv_obj_set_size(detail_cont, LV_PCT(60), LV_PCT(60));
 
-  //detail containter row 1
-  lv_obj_set_grid_cell(extruder_temp.get_container(), LV_GRID_ALIGN_START, 0, 1, LV_GRID_ALIGN_START, 0, 1);
-  lv_obj_set_grid_cell(bed_temp.get_container(), LV_GRID_ALIGN_START, 1, 1, LV_GRID_ALIGN_START, 0, 1);
+  // detail container row 1
+  uint8_t row = 0;
+  lv_obj_set_grid_cell(elapsed.get_container(), LV_GRID_ALIGN_START, 0, 1, LV_GRID_ALIGN_START, row, 1);
+  lv_obj_set_grid_cell(time_left.get_container(), LV_GRID_ALIGN_START, 1, 1, LV_GRID_ALIGN_START, row, 1);
+  row++;
 
-  //detail containter row 2
-  lv_obj_set_grid_cell(print_speed.get_container(), LV_GRID_ALIGN_START, 0, 1, LV_GRID_ALIGN_START, 1, 1);
-  lv_obj_set_grid_cell(z_offset.get_container(), LV_GRID_ALIGN_START, 1, 1, LV_GRID_ALIGN_START, 1, 1);
+  // detail container row 2
+  lv_obj_set_grid_cell(extruder_temp.get_container(), LV_GRID_ALIGN_START, 0, 1, LV_GRID_ALIGN_START, row, 1);
+  lv_obj_set_grid_cell(bed_temp.get_container(), LV_GRID_ALIGN_START, 1, 1, LV_GRID_ALIGN_START, row, 1);
+  row++;
 
-  //detail containter row 3
-  lv_obj_set_grid_cell(flow_rate.get_container(), LV_GRID_ALIGN_START, 0, 1, LV_GRID_ALIGN_START, 2, 1);
-  lv_obj_set_grid_cell(layers.get_container(), LV_GRID_ALIGN_START, 1, 1, LV_GRID_ALIGN_START, 2, 1);
-
-  //detail containter row 4
-  lv_obj_set_grid_cell(elapsed.get_container(), LV_GRID_ALIGN_START, 0, 1, LV_GRID_ALIGN_START, 3, 1);
-  lv_obj_set_grid_cell(fan0.get_container(), LV_GRID_ALIGN_START, 1, 1, LV_GRID_ALIGN_START, 3, 1);
-
-  //detail containter row 5
-  lv_obj_set_grid_cell(time_left.get_container(), LV_GRID_ALIGN_START, 0, 1, LV_GRID_ALIGN_START, 4, 1);
-  // lv_obj_set_grid_cell(fan2.get_container(), LV_GRID_ALIGN_START, 1, 1, LV_GRID_ALIGN_START, 4, 1);
+  // detail container row 3
+  lv_obj_set_grid_cell(fan0.get_container(), LV_GRID_ALIGN_START, 0, 1, LV_GRID_ALIGN_START, row, 1);
+  lv_obj_set_grid_cell(z_offset.get_container(), LV_GRID_ALIGN_START, 1, 1, LV_GRID_ALIGN_START, row, 1);
 
   static lv_coord_t grid_main_row_dsc[] = {LV_GRID_FR(2), LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
   static lv_coord_t grid_main_col_dsc[] = {LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
@@ -163,8 +152,6 @@ void PrintStatusPanel::background() {
 void PrintStatusPanel::reset() {
   lv_bar_set_value(progress_bar, 0, LV_ANIM_OFF);
   lv_label_set_text(progress_label, "0%");
-  print_speed.update_label("0 mm/s");
-  flow_rate.update_label("0.0 mm3/s");
   elapsed.update_label("0s");
   time_left.update_label("...");
   estimated_time_s = 0;
@@ -314,6 +301,9 @@ void PrintStatusPanel::consume(json &j) {
     auto print_status = pstate.template get<std::string>();
     if (print_status != "printing" && print_status != "paused") {
       mini_print_status.hide();
+      if (print_status != "standby") {
+        background();
+      }
     } else {
       mini_print_status.show();
     }
@@ -347,13 +337,6 @@ void PrintStatusPanel::consume(json &j) {
     } else {
       bed_temp.update_label(fmt::format("{}", v.template get<int>()).c_str());
     }
-  }
-
-  // speed
-  auto speed = j["/params/0/motion_report/live_velocity"_json_pointer];
-  if (!speed.is_null()) {
-    int s = static_cast<int>(speed.template get<double>());
-    print_speed.update_label((std::to_string(s) + " mm/s").c_str());
   }
 
   // zoffset
@@ -399,12 +382,6 @@ void PrintStatusPanel::consume(json &j) {
     mini_print_status.update_progress(new_value);
   }
 
-  v = j["/params/0/motion_report/live_extruder_velocity"_json_pointer];
-  if (!v.is_null()) {
-    double flow = pi() / 4 * std::pow(filament_diameter, 2) * v.template get<double>();
-    flow_rate.update_label(fmt::format("{:.1f} mm3/s", flow > 0.0 ? flow : 0.0).c_str());
-  }
-
   v = j["/params/0/pause_resume/is_paused"_json_pointer];
   if (!v.is_null()) {
     bool is_paused = v.template get<bool>();
@@ -423,10 +400,6 @@ void PrintStatusPanel::consume(json &j) {
       lv_obj_add_flag(resume_btn.get_container(), LV_OBJ_FLAG_HIDDEN);
     }
   }
-
-  // layers
-  v = j["/params/0/print_stats/info"_json_pointer];
-  update_layers(v);
 }
 
 void PrintStatusPanel::handle_callback(lv_event_t *event) {
@@ -464,10 +437,6 @@ void PrintStatusPanel::update_time_progress(uint32_t time_passed) {
     }
 
     elapsed.update_label(KUtils::eta_string(time_passed).c_str());
-}
-
-void PrintStatusPanel::update_layers(json &info) {
-  layers.update_label(fmt::format("{} / {}", current_layer(info), max_layer(info)).c_str());
 }
 
 int PrintStatusPanel::max_layer(json &info) {

@@ -35,8 +35,6 @@ class PrintStatusPanel : public NotifyConsumer {
 
   void consume(json &j);
   void update_time_progress(uint32_t time_passed);
-  void update_flow_rate(double filament_used);
-  void update_layers(json &info);
   int max_layer(json &info);
   int current_layer(json &info);
 
@@ -63,10 +61,7 @@ class PrintStatusPanel : public NotifyConsumer {
 
   ImageLabel extruder_temp;
   ImageLabel bed_temp;
-  ImageLabel print_speed;
   ImageLabel z_offset;
-  ImageLabel flow_rate;
-  ImageLabel layers;
   ImageLabel fan0;
   ImageLabel elapsed;
   /* ImageLabel fan1; */
