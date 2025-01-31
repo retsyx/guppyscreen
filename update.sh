@@ -13,12 +13,12 @@ fi
 CURL=`which curl`
 if grep -Fqs "ID=buildroot" /etc/os-release
 then
-    wget -q --no-check-certificate https://raw.githubusercontent.com/ballaswag/k1-discovery/main/bin/curl -O /tmp/curl
+    wget -q --no-check-certificate https://raw.githubusercontent.com/retsyx/k1-discovery/main/bin/curl -O /tmp/curl
     chmod +x /tmp/curl
     CURL=/tmp/curl
 fi
 
-$CURL -s https://api.github.com/repos/ballaswag/guppyscreen/releases -o /tmp/guppy-releases.json
+$CURL -s https://api.github.com/repos/retsyx/guppyscreen/releases -o /tmp/guppy-releases.json
 latest_version=`jq -r '.[0].tag_name' /tmp/guppy-releases.json`
 
 if [ "$(printf '%s\n' "$CURRENT_VERSION" "$latest_version" | sort -V | head -n1)" = "$latest_version" ]; then
