@@ -1,4 +1,4 @@
-# This is a fork
+# This is a Fork
 
 This is a fork of the original Guppy Screen. It is tailored for running natively on the Creality K1 3D printer. It had reduced functionality compared to the original; concentrating on using the display as a quick printing interface instead of a general purpose printer management interface (no macros, console or other advanced features that are better done from a web browser, anyway). There are also some fixes and cleanup.
 
@@ -43,10 +43,6 @@ ssh into your K1/Max and run the follwow command:
 ```
 
 ## Features
-:white_check_mark: Console/Macro Shell  
-:white_check_mark: Bedmesh  
-:white_check_mark: Input Shaper (PSD graphs)  
-:white_check_mark: Belt Calibration/Excitate  
 :white_check_mark: Print Status  
 :white_check_mark: Spoolman Integration  
 :white_check_mark: Extrude/Retract  
@@ -56,7 +52,6 @@ ssh into your K1/Max and run the follwow command:
 :white_check_mark: Limits (Velocity, Acel, Square Corner Velocity, etc.)  
 :white_check_mark: File Browser  
 :white_check_mark: Supports multiple screen resolutions  
-:white_check_mark: Cross platform releases (MIPS/ARM/x86)  
 :white_check_mark: TMC Metrics  
 :white_check_mark: Multi-Printer support  
 
