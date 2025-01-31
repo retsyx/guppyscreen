@@ -1,6 +1,6 @@
 # This is a Fork
 
-This is a fork of the original Guppy Screen. It is tailored for running natively on the Creality K1 3D printer. It had reduced functionality compared to the original; concentrating on using the display as a quick printing interface instead of a general purpose printer management interface (no macros, console or other advanced features that are better done from a web browser, anyway). There are also some fixes and cleanup.
+This is a fork of the original Guppy Screen. It is tailored for running natively on the Creality K1 3D printer. It has reduced functionality compared to the original; concentrating on using the display as a quick printing interface instead of a general purpose printer management interface (no macros, console or other advanced features that are better done from a web browser, anyway). There are also some fixes and cleanup.
 
 # Guppy Screen for Klipper
 
