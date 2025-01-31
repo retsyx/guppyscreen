@@ -119,6 +119,8 @@ GuppyScreen *GuppyScreen::init(std::function<void(lv_color_t, lv_color_t)> hal_i
   lv_style_set_border_width(&style_container, 0);
   lv_style_set_radius(&style_container, 0);
 
+  lv_style_set_text_font(&style_container, &lv_font_montserrat_20);
+
 //  lv_style_init(&style_imgbtn_default);
 //  lv_style_set_img_recolor_opa(&style_imgbtn_default, LV_OPA_100);
 //  lv_style_set_img_recolor(&style_imgbtn_default, lv_color_black());
@@ -281,6 +283,7 @@ void GuppyScreen::refresh_theme() {
                          : lv_color_hex(std::stoul(theme_conf->get<std::string>("/secondary_color"), nullptr, 16));
 
   lv_disp_t *disp = lv_disp_get_default();
+
   lv_theme_t * new_theme =  lv_theme_default_init(disp, primary_color, secondary_color, true, th->font_normal);
   lv_disp_set_theme(disp, new_theme);
   lv_style_set_img_recolor(&style_imgbtn_pressed, primary_color);

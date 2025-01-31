@@ -38,7 +38,8 @@ MiniPrintStatus::MiniPrintStatus(lv_obj_t *parent,
   lv_obj_add_flag(cont, LV_OBJ_FLAG_CLICKABLE);
   lv_obj_add_event_cb(cont, cb, LV_EVENT_CLICKED, user_data);
 
-  lv_label_set_text(status_label, fmt::format("ETA: {}\nStatus: {}", eta, status).c_str());
+  update_eta(eta);
+  update_status(status);
 
   lv_arc_set_rotation(progress_bar, 270);
   lv_obj_set_size(progress_bar, 40 * scale, 40 * scale);
@@ -75,14 +76,22 @@ lv_obj_t *MiniPrintStatus::get_container() {
   return cont;
 }
 
+void MiniPrintStatus::update_status_label() {
+  if (status == "paused") {
+    lv_label_set_text(status_label, fmt::format("ETA: {} ({})", eta, status).c_str());
+  } else {
+    lv_label_set_text(status_label, fmt::format("ETA: {}", eta).c_str());
+  }
+}
+
 void MiniPrintStatus::update_eta(std::string &eta_str) {
   eta = eta_str;
-  lv_label_set_text(status_label, fmt::format("ETA: {}\nStatus: {}", eta, status).c_str());
+  update_status_label();
 }
 
 void MiniPrintStatus::update_status(std::string &status_str) {
   status = status_str;
-  lv_label_set_text(status_label, fmt::format("ETA: {}\nStatus: {}", eta, status).c_str());
+  update_status_label();
 }
 
 void MiniPrintStatus::update_progress(int p) {

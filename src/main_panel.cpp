@@ -15,6 +15,7 @@ LV_IMG_DECLARE(fan);
 LV_IMG_DECLARE(heater);
 
 LV_FONT_DECLARE(materialdesign_font_40);
+
 #define HOME_SYMBOL "\xF3\xB0\x8B\x9C"
 #define SETTING_SYMBOL "\xF3\xB0\x92\x93"
 

@@ -16,6 +16,7 @@ class MiniPrintStatus {
   void hide();
   lv_obj_t *get_container();
 
+  void update_status_label();
   void update_eta(std::string &eta_str);
   void update_status(std::string &status_str);
   void update_progress(int p);
