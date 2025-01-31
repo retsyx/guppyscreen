@@ -23,22 +23,22 @@ MacroItem::MacroItem(KWebSocketClient &c,
   }
 
   lv_obj_set_size(cont, LV_PCT(100), LV_SIZE_CONTENT);
-  // lv_obj_set_style_bg_color(cont, bg_color, 0);  
+  // lv_obj_set_style_bg_color(cont, bg_color, 0);
   // lv_obj_set_style_bg_opa(cont, LV_OPA_COVER, 0);
 
   lv_obj_set_size(top_cont, LV_PCT(100), LV_SIZE_CONTENT);
-  // lv_obj_set_style_bg_color(top_cont, bg_color, 0);  
+  // lv_obj_set_style_bg_color(top_cont, bg_color, 0);
   // lv_obj_set_style_bg_opa(top_cont, LV_OPA_COVER, 0);
   lv_obj_set_style_pad_all(top_cont, 0, 0);
-  
+
   lv_obj_set_flex_flow(cont, LV_FLEX_FLOW_ROW_WRAP);
   lv_obj_set_flex_align(cont, LV_FLEX_ALIGN_SPACE_EVENLY, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
 
-  lv_obj_set_style_border_side(cont, LV_BORDER_SIDE_TOP, LV_PART_MAIN);  
+  lv_obj_set_style_border_side(cont, LV_BORDER_SIDE_TOP, LV_PART_MAIN);
 
   lv_obj_set_style_border_width(cont, 2, 0);
   lv_obj_clear_flag(hide_show_cont, LV_OBJ_FLAG_SCROLLABLE);
-  
+
   lv_obj_center(hide_show);
 
   if (hidden) {
@@ -70,9 +70,9 @@ MacroItem::MacroItem(KWebSocketClient &c,
 
   if (!m_params.empty()) {
     lv_obj_t *params_cont = lv_obj_create(cont);
-    // lv_obj_set_style_bg_color(params_cont, bg_color, 0);  
+    // lv_obj_set_style_bg_color(params_cont, bg_color, 0);
     // lv_obj_set_style_bg_opa(params_cont, LV_OPA_COVER, 0);
-    
+
     lv_obj_set_size(params_cont, LV_PCT(70), LV_SIZE_CONTENT);
 
     lv_obj_set_flex_flow(params_cont, LV_FLEX_FLOW_ROW_WRAP);
@@ -114,11 +114,11 @@ void MacroItem::handle_kb_input(lv_event_t *e)
   lv_obj_t *obj = lv_event_get_target(e);
 
   if(code == LV_EVENT_FOCUSED) {
-    spdlog::trace("macro item focused");    
+    spdlog::trace("macro item focused");
     lv_keyboard_set_textarea(kb, obj);
     lv_obj_clear_flag(kb, LV_OBJ_FLAG_HIDDEN);
   }
-  
+
   if(code == LV_EVENT_DEFOCUSED) {
     spdlog::trace("macro item defocused");
     lv_obj_add_flag(kb, LV_OBJ_FLAG_HIDDEN);
@@ -132,7 +132,7 @@ void MacroItem::handle_kb_input(lv_event_t *e)
     spdlog::trace("macro item keyboard close");
     lv_obj_add_flag(kb, LV_OBJ_FLAG_HIDDEN);
   }
-  
+
 }
 
 void MacroItem::handle_send_macro(lv_event_t *e) {
@@ -149,7 +149,7 @@ void MacroItem::handle_send_macro(lv_event_t *e) {
       }
     }
 
-    spdlog::trace("sending macro: {}", fmt::format("{}", fmt::join(kv, " "))); 
+    spdlog::trace("sending macro: {}", fmt::format("{}", fmt::join(kv, " ")));
     ws.gcode_script(fmt::format("{}", fmt::join(kv, " ")));
   }
 }
@@ -161,18 +161,18 @@ void MacroItem::handle_hide_show(lv_event_t *e) {
     std::string key = fmt::format("macros.settings.{}", lv_label_get_text(macro_label));
 
     json h = {
-      {"namespace", "guppyscreen"}, 
+      {"namespace", "guppyscreen"},
       {"key", key },
       {"value", {
 	  { "hidden", !hidden }
 	}
       }
     };
-    
+
     ws.send_jsonrpc("server.database.post_item", h);
-    
+
     hidden = !hidden;
-    
+
     if (hidden) {
       if (!always_visible) {
 	lv_obj_add_flag(cont, LV_OBJ_FLAG_HIDDEN);

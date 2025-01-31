@@ -55,7 +55,7 @@ class TmcTunePanel {
   void background();
 
   void save_config();
-  
+
  private:
   KWebSocketClient &ws;
   lv_obj_t *cont;

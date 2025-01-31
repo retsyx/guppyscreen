@@ -20,7 +20,7 @@ TmcStatusPanel::TmcStatusPanel(KWebSocketClient &c,
   lv_obj_move_background(cont);
   lv_obj_set_size(cont, LV_PCT(100), LV_PCT(100));
   lv_obj_set_style_pad_all(cont, 0, 0);
-  
+
   lv_obj_set_flex_flow(cont, LV_FLEX_FLOW_COLUMN);
 
   lv_obj_set_size(top, LV_PCT(100), LV_SIZE_CONTENT);
@@ -38,7 +38,7 @@ TmcStatusPanel::TmcStatusPanel(KWebSocketClient &c,
     lv_event_code_t code = lv_event_get_code(e);
     lv_obj_t * obj = lv_event_get_target(e);
     if(code == LV_EVENT_VALUE_CHANGED) {
-      TmcStatusPanel *p = (TmcStatusPanel*)e->user_data;      
+      TmcStatusPanel *p = (TmcStatusPanel*)e->user_data;
       if (lv_obj_has_state(obj, LV_STATE_CHECKED)) {
 	p->ws.gcode_script("_GUPPY_LOAD_MODULE SECTION=tmcstatus");
       } else {
@@ -47,10 +47,10 @@ TmcStatusPanel::TmcStatusPanel(KWebSocketClient &c,
     }
   }, LV_EVENT_VALUE_CHANGED, this);
 
-  lv_obj_add_flag(back_btn.get_container(), LV_OBJ_FLAG_FLOATING);  
+  lv_obj_add_flag(back_btn.get_container(), LV_OBJ_FLAG_FLOATING);
   lv_obj_align(back_btn.get_container(), LV_ALIGN_BOTTOM_RIGHT, 0, -20);
 
-  ws.register_notify_update(this);    
+  ws.register_notify_update(this);
 }
 
 TmcStatusPanel::~TmcStatusPanel() {
@@ -82,12 +82,12 @@ void TmcStatusPanel::init(json &j) {
       } else {
 	spdlog::debug("tmc stepper created {}", el.key());
 	auto tmc_status_cont = std::make_shared<TmcStatusContainer>(ws, cont, el.key());
-	metrics.insert({el.key(), tmc_status_cont});      
+	metrics.insert({el.key(), tmc_status_cont});
 	tmc_status_cont->update(el.value());
       }
     }
   }
-  
+
 }
 
 void TmcStatusPanel::consume(json &j) {
@@ -103,7 +103,7 @@ void TmcStatusPanel::consume(json &j) {
       } else {
 	spdlog::debug("tmc stepper created {}", el.key());
 	auto tmc_status_cont = std::make_shared<TmcStatusContainer>(ws, cont, el.key());
-	metrics.insert({el.key(), tmc_status_cont});      
+	metrics.insert({el.key(), tmc_status_cont});
 	tmc_status_cont->update(el.value());
       }
     }

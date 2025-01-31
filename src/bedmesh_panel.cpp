@@ -12,7 +12,6 @@ LV_IMG_DECLARE(delete_img);
 LV_IMG_DECLARE(bedmesh_img);
 LV_IMG_DECLARE(sd_img);
 
-
 static lv_color_t color_gradient(double offset);
 
 BedMeshPanel::BedMeshPanel(KWebSocketClient &c, std::mutex &l)
@@ -35,11 +34,11 @@ BedMeshPanel::BedMeshPanel(KWebSocketClient &c, std::mutex &l)
   , kb(lv_keyboard_create(prompt))
 {
   lv_obj_move_background(cont);
-  
+
   lv_obj_set_size(cont, LV_PCT(100), LV_PCT(100));
   lv_obj_set_style_pad_all(cont, 0, 0);
   lv_obj_set_style_pad_row(cont, 0, 0);
-  
+
   lv_obj_clear_flag(cont, LV_OBJ_FLAG_SCROLLABLE);
   lv_obj_set_flex_flow(cont, LV_FLEX_FLOW_COLUMN);
   lv_obj_set_flex_grow(top_cont, 1);
@@ -57,10 +56,10 @@ BedMeshPanel::BedMeshPanel(KWebSocketClient &c, std::mutex &l)
   }
   auto scale = (double)screen_width / 800.0;
   auto hscale = (double)lv_disp_get_physical_ver_res(NULL) / 480.0;
-  
+
   lv_obj_set_size(profile_cont, LV_PCT(50), 340 * hscale);
   lv_obj_set_style_pad_all(profile_cont, 0, 0);
-  lv_obj_set_style_border_width(profile_cont, 0, 0);  
+  lv_obj_set_style_border_width(profile_cont, 0, 0);
   lv_obj_clear_flag(profile_cont, LV_OBJ_FLAG_SCROLLABLE);
   lv_obj_set_flex_flow(profile_cont, LV_FLEX_FLOW_COLUMN);
 
@@ -83,7 +82,7 @@ BedMeshPanel::BedMeshPanel(KWebSocketClient &c, std::mutex &l)
   lv_obj_set_flex_align(controls_cont, LV_FLEX_ALIGN_SPACE_EVENLY, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER);
   lv_obj_set_flex_flow(controls_cont, LV_FLEX_FLOW_ROW);
   lv_obj_clear_flag(controls_cont, LV_OBJ_FLAG_SCROLLABLE);
- 
+
   lv_obj_add_event_cb(mesh_table, &BedMeshPanel::_mesh_draw_cb, LV_EVENT_DRAW_PART_BEGIN, this);
   lv_obj_add_event_cb(profile_table, &BedMeshPanel::_handle_profile_action, LV_EVENT_VALUE_CHANGED, this);
 
@@ -91,17 +90,17 @@ BedMeshPanel::BedMeshPanel(KWebSocketClient &c, std::mutex &l)
   lv_obj_set_style_pad_all(prompt, 0, 0);
   lv_obj_set_size(prompt, LV_PCT(100), LV_PCT(100));
   lv_obj_clear_flag(prompt, LV_OBJ_FLAG_SCROLLABLE);
-  lv_obj_add_flag(prompt, LV_OBJ_FLAG_HIDDEN);  
+  lv_obj_add_flag(prompt, LV_OBJ_FLAG_HIDDEN);
   lv_obj_set_style_bg_opa(prompt, LV_OPA_70, 0);
 
   lv_textarea_set_one_line(input, true);
   lv_obj_set_width(input, LV_PCT(100));
-  
+
   // lv_obj_add_flag(kb, LV_OBJ_FLAG_HIDDEN);
   lv_obj_set_flex_flow(msgbox, LV_FLEX_FLOW_ROW_WRAP);
   lv_obj_set_flex_align(msgbox, LV_FLEX_ALIGN_SPACE_EVENLY, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER);
   lv_obj_set_style_pad_row(msgbox, 25, 0);
-  
+
   lv_obj_clear_flag(msgbox, LV_OBJ_FLAG_SCROLLABLE);
 
   lv_obj_set_size(msgbox, LV_PCT(60), LV_PCT(40));
@@ -162,7 +161,7 @@ void BedMeshPanel::refresh_views_with_lock(json &bm) {
   refresh_views(bm);
 }
 
-void BedMeshPanel::refresh_views(json &bm) {  
+void BedMeshPanel::refresh_views(json &bm) {
   if (!bm.is_null()) {
     auto active_profile_j = bm["/profile_name"_json_pointer];
     size_t row_idx = 0;
@@ -177,7 +176,7 @@ void BedMeshPanel::refresh_views(json &bm) {
 
       refresh_profile_info(active_profile);
       lv_obj_clear_flag(mesh_table, LV_OBJ_FLAG_HIDDEN);
-      
+
       auto mesh_json = bm["/probed_matrix"_json_pointer];
       if (mesh_json.is_null()) {
 	mesh_json = State::get_instance()->get_data("/printer_state/bed_mesh/probed_matrix"_json_pointer);
@@ -228,11 +227,11 @@ void BedMeshPanel::refresh_views(json &bm) {
 
     if (profiles.size() > 0) {
       lv_obj_clear_flag(profile_cont, LV_OBJ_FLAG_HIDDEN);
-      
+
       row_idx = 0;
       for (auto &el : profiles.items()) {
 	lv_table_clear_cell_ctrl(profile_table, row_idx, 0, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
-      
+
 	bool is_active = el.key() == active_profile;
 	if (is_active) {
 	  lv_table_add_cell_ctrl(profile_table, row_idx, 0, LV_TABLE_CELL_CTRL_MERGE_RIGHT);
@@ -248,9 +247,9 @@ void BedMeshPanel::refresh_views(json &bm) {
       lv_table_set_row_cnt(profile_table, row_idx);
     } else {
       // no profiles, hide profile table
-      lv_obj_add_flag(profile_cont, LV_OBJ_FLAG_HIDDEN);      
+      lv_obj_add_flag(profile_cont, LV_OBJ_FLAG_HIDDEN);
     }
-  }  
+  }
 }
 
 void BedMeshPanel::refresh_profile_info(std::string profile) {
@@ -272,7 +271,7 @@ void BedMeshPanel::refresh_profile_info(std::string profile) {
       lv_table_set_cell_value(profile_info, rowidx, 0, "Tension");
       lv_table_set_cell_value(profile_info, rowidx, 1, fmt::format("{}", v.template get<double>()).c_str());
       rowidx++;
-    }    
+    }
 
     std::vector<int> xvalues;
     for (auto &param : {"min_x", "max_x", "x_count", "mesh_x_pps"}) {
@@ -284,7 +283,7 @@ void BedMeshPanel::refresh_profile_info(std::string profile) {
 
     lv_table_set_cell_value(profile_info, rowidx, 0, "X (min, max, count, pps)");
     lv_table_set_cell_value(profile_info, rowidx, 1, fmt::format("{}", fmt::join(xvalues, ", ")).c_str());
-    rowidx++;    
+    rowidx++;
 
     std::vector<int> yvalues;
     for (auto &param : {"min_y", "max_y", "y_count", "mesh_y_pps"}) {
@@ -304,7 +303,7 @@ void BedMeshPanel::foreground() {
   auto bm = State::get_instance()->get_data("/printer_state/bed_mesh"_json_pointer);
   spdlog::trace("bm {}", bm.dump());
   refresh_views(bm);
-  
+
   lv_obj_move_foreground(cont);
 }
 
@@ -318,13 +317,13 @@ void BedMeshPanel::handle_callback(lv_event_t *event) {
     if (active_profile.length() > 0) {
       lv_textarea_set_text(input, active_profile.c_str());
     }
-    
+
     lv_obj_move_foreground(prompt);
-    
+
   } else if (btn == clear_btn.get_container()) {
     spdlog::trace("mesh clear pressed");
     ws.gcode_script("BED_MESH_CLEAR");
-    
+
   } else if (btn == calibrate_btn.get_container()) {
     spdlog::trace("mesh calibrate pressed");
     auto v = State::get_instance()
@@ -354,7 +353,7 @@ void BedMeshPanel::handle_profile_action(lv_event_t *e) {
     if (row == LV_TABLE_CELL_NONE || col == LV_TABLE_CELL_NONE || row >= row_count) {
       return;
     }
-    const char *selected = lv_table_get_cell_value(profile_table, row, col);    
+    const char *selected = lv_table_get_cell_value(profile_table, row, col);
     const char *profile_name = lv_table_get_cell_value(profile_table, row, 0);
     spdlog::trace("selected {}, {}, value {}", row, col, profile_name);
     if (col == 2) {
@@ -371,7 +370,7 @@ void BedMeshPanel::handle_profile_action(lv_event_t *e) {
     } else if (col == 0) {
       // display mesh info and refresh bed mesh matrix
     }
-      
+
   }
 }
 
@@ -386,15 +385,15 @@ void BedMeshPanel::handle_prompt_save(lv_event_t *e) {
     ws.gcode_script(fmt::format("BED_MESH_PROFILE SAVE=\"{}\"\nSAVE_CONFIG", profile_name));
 
     lv_textarea_set_text(input, "");
-    lv_obj_add_flag(prompt, LV_OBJ_FLAG_HIDDEN);  
+    lv_obj_add_flag(prompt, LV_OBJ_FLAG_HIDDEN);
     lv_obj_move_background(prompt);
-  }  
+  }
 }
 
 void BedMeshPanel::handle_prompt_cancel(lv_event_t *e) {
   lv_event_code_t code = lv_event_get_code(e);
   if(code == LV_EVENT_CLICKED) {
-    lv_obj_add_flag(prompt, LV_OBJ_FLAG_HIDDEN);  
+    lv_obj_add_flag(prompt, LV_OBJ_FLAG_HIDDEN);
     lv_obj_move_background(prompt);
   }
 }
@@ -412,7 +411,7 @@ void BedMeshPanel::handle_kb_input(lv_event_t *e)
     ws.gcode_script(fmt::format("BED_MESH_PROFILE SAVE=\"{}\"\nSAVE_CONFIG", profile_name));
 
     lv_textarea_set_text(input, "");
-    lv_obj_add_flag(prompt, LV_OBJ_FLAG_HIDDEN);  
+    lv_obj_add_flag(prompt, LV_OBJ_FLAG_HIDDEN);
     lv_obj_move_background(prompt);
   }
 }
@@ -427,7 +426,7 @@ void BedMeshPanel::mesh_draw_cb(lv_event_t * e)
 
     dsc->label_dsc->align = LV_TEXT_ALIGN_CENTER;
     dsc->label_dsc->color = lv_palette_darken(LV_PALETTE_GREY, 3);
-    
+
     // rows of the mesh is reversed
     int32_t reversed_row_idx = mesh.size() - row - 1;
     double offset = mesh[reversed_row_idx][col];
@@ -449,6 +448,6 @@ static lv_color_t color_gradient(double offset)
   if (offset < 0 ) {
     return lv_color_make(color, color, 255);
   }
-  
+
   return lv_color_make(255, 255, 255);
 }

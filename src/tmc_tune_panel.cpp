@@ -47,7 +47,7 @@ AutoTmcContainer::AutoTmcContainer(const std::list<std::string> &motors,
   lv_obj_set_style_border_width(cont, 2, 0);
   lv_obj_set_style_pad_all(cont, 0, 0);
   lv_obj_set_style_pad_bottom(cont, 20, 0);
-  
+
   lv_dropdown_clear_options(motors_dd);
 
   size_t index = 0;
@@ -61,7 +61,7 @@ AutoTmcContainer::AutoTmcContainer(const std::list<std::string> &motors,
   lv_dropdown_set_selected(motors_dd, motor_idx);
 
   lv_obj_set_width(tuning_goal_dd, LV_PCT(40));
-  
+
   lv_dropdown_set_options(tuning_goal_dd,
 			  "auto\n"
 			  "silent\n"
@@ -118,16 +118,16 @@ AutoTmcContainer::AutoTmcContainer(const std::list<std::string> &motors,
     lv_obj_set_grid_dsc_array(cont, grid_main_col_dsc, grid_main_row3_dsc);
   } else {
     lv_obj_set_grid_dsc_array(cont, grid_main_col_dsc, grid_main_row_dsc);
-    
+
     lv_obj_t *label = lv_label_create(cont);
     lv_label_set_text(label, "Sensorless Threshold");
-    lv_obj_set_grid_cell(label, LV_GRID_ALIGN_START, 0, 1, LV_GRID_ALIGN_CENTER, 3, 1); 
+    lv_obj_set_grid_cell(label, LV_GRID_ALIGN_START, 0, 1, LV_GRID_ALIGN_CENTER, 3, 1);
     lv_obj_set_grid_cell(spinbox_cont, LV_GRID_ALIGN_START, 1, 1, LV_GRID_ALIGN_CENTER, 3, 1);
   }
 
   lv_obj_t *label = lv_label_create(cont);
   lv_label_set_text(label, name.c_str());
-  
+
   // row 1
   lv_obj_set_grid_cell(label, LV_GRID_ALIGN_START, 0, 2, LV_GRID_ALIGN_CENTER, 0, 1);
 
@@ -194,7 +194,7 @@ TmcTunePanel::TmcTunePanel(KWebSocketClient &c)
   lv_obj_set_style_pad_all(cont, 0, 0);
   lv_obj_set_style_pad_row(cont, 0, 0);
 
-  lv_obj_set_height(controls_cont, LV_PCT(100)); 
+  lv_obj_set_height(controls_cont, LV_PCT(100));
   lv_obj_set_flex_grow(controls_cont, 1);
 
   lv_obj_set_flex_flow(controls_cont, LV_FLEX_FLOW_COLUMN);
@@ -202,11 +202,11 @@ TmcTunePanel::TmcTunePanel(KWebSocketClient &c)
   lv_obj_set_flex_flow(btns_cont, LV_FLEX_FLOW_COLUMN);
   lv_obj_set_style_pad_all(btns_cont, 0, 0);
   lv_obj_set_style_pad_top(btns_cont, 5, 0);
-  lv_obj_set_size(btns_cont, LV_SIZE_CONTENT, LV_PCT(100)); 
+  lv_obj_set_size(btns_cont, LV_SIZE_CONTENT, LV_PCT(100));
   lv_obj_set_flex_align(btns_cont, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_END, LV_FLEX_ALIGN_CENTER);
-  lv_obj_add_flag(back_btn.get_container(), LV_OBJ_FLAG_FLOATING);  
+  lv_obj_add_flag(back_btn.get_container(), LV_OBJ_FLAG_FLOATING);
   lv_obj_align(back_btn.get_container(), LV_ALIGN_BOTTOM_RIGHT, 0, -20);
-  
+
 }
 
 TmcTunePanel::~TmcTunePanel() {
@@ -240,15 +240,15 @@ void TmcTunePanel::init(json &j, fs::path &kp) {
 
   for (auto &el : v.items()) {
     if (el.key().rfind("autotune_tmc ", 0) == 0) {
-      // existing auto tune tmc configs      
+      // existing auto tune tmc configs
       std::string stepper_name = el.key().substr(el.key().find(' ') + 1);
       tuned_config.insert({stepper_name, el.value()});
 
       spdlog::debug("found tuned stepper {}, {}", stepper_name, el.value().dump());
     }
-    
+
     if (el.key().rfind("tmc", 0) == 0 && el.key().find(' ') != std::string::npos) {
-      spdlog::debug("found configured tmc {}", el.key());      
+      spdlog::debug("found configured tmc {}", el.key());
       configured_steppers.push_back(el.key());
     }
   }
@@ -257,7 +257,7 @@ void TmcTunePanel::init(json &j, fs::path &kp) {
     std::string tmctype = s.substr(0, s.find(' '));
     std::string stepper_name = s.substr(s.find(' ') + 1);
     spdlog::debug("tmctype {}, stepper {}, s {}", tmctype, stepper_name, s);
-    
+
     auto endstop_pin = v[json::json_pointer(fmt::format("/{}/endstop_pin", stepper_name))];
     auto sg_range_el = tmc_sg_range.find(tmctype);
     bool has_virtual_endstop = !endstop_pin.is_null()
@@ -267,7 +267,7 @@ void TmcTunePanel::init(json &j, fs::path &kp) {
     spdlog::debug("has_virtual_endstop {}, {}, {}", !endstop_pin.is_null(),
 		  !endstop_pin.is_null() ? endstop_pin.template get<std::string>().find("virtual_endstop") != std::string::npos : false,
 		  !endstop_pin.is_null() ? endstop_pin.template get<std::string>(): "null");
-    
+
     auto sg_range = sg_range_el != tmc_sg_range.end()
       ? sg_range_el->second
       : std::make_pair<int16_t, int16_t>(0, 0);
@@ -277,7 +277,7 @@ void TmcTunePanel::init(json &j, fs::path &kp) {
       auto motor = el->second["/motor"_json_pointer];
       auto goal = el->second["/tuning_goal"_json_pointer];
       auto sgthrs = el->second["/sg4_thrs"_json_pointer];
-      
+
       spdlog::debug("found tuned stepper {}, {}, {}",
 		    motor.is_null() ? "NULL" : motor.template get<std::string>(),
 		    goal.is_null() ? "auto" : goal.template get<std::string>(),

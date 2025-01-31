@@ -51,7 +51,7 @@ SpoolmanPanel::SpoolmanPanel(KWebSocketClient &c, std::mutex &l)
   lv_table_set_col_width(spool_table, 2, material_width); // material
   lv_table_set_col_width(spool_table, 4, len_field_width);
   lv_table_set_col_width(spool_table, 5, len_field_width);
-  
+
   // controls
   lv_obj_set_width(controls, LV_PCT(100));
   lv_obj_set_flex_flow(controls, LV_FLEX_FLOW_ROW);
@@ -106,7 +106,7 @@ void SpoolmanPanel::init() {
 	return a["id"].template get<uint32_t>() < b["id"].template get<uint32_t>();
       });
       sorted_by = SORTED_BY_ID;
-      
+
       std::lock_guard<std::mutex> lock(this->lv_lock);
       populate_spools(sorted_spools);
     }
@@ -123,7 +123,7 @@ void SpoolmanPanel::init() {
 	return a["id"].template get<uint32_t>() < b["id"].template get<uint32_t>();
       });
       sorted_by = SORTED_BY_ID;
-      
+
       std::lock_guard<std::mutex> lock(this->lv_lock);
       populate_spools(sorted_spools);
 
@@ -153,7 +153,7 @@ void SpoolmanPanel::populate_spools(std::vector<json> &sorted_spools) {
       if (skip_archive && is_archived) {
 	continue;
       }
-      
+
       auto id = el["/id"_json_pointer].template get<uint32_t>();
       bool is_active = id == active_id;
 
@@ -278,7 +278,7 @@ void SpoolmanPanel::handle_spoolman_action(lv_event_t *e) {
 	sorted_by = (sorted_by ^ SORTED_BY_ID) & SORTED_BY_ID;
 
 	populate_spools(sorted_spools);
-	
+
       } else if (col == 1) {
 	// sort by name
 	bool reversed = sorted_by & SORTED_BY_NAME;
@@ -297,7 +297,7 @@ void SpoolmanPanel::handle_spoolman_action(lv_event_t *e) {
 	sorted_by = (sorted_by ^ SORTED_BY_NAME) & SORTED_BY_NAME;
 
 	populate_spools(sorted_spools);
-	
+
       } else if (col == 2) {
 	// sort by material
 	bool reversed = sorted_by & SORTED_BY_MAT;
@@ -311,7 +311,7 @@ void SpoolmanPanel::handle_spoolman_action(lv_event_t *e) {
 	sorted_by = (sorted_by ^ SORTED_BY_MAT) & SORTED_BY_MAT;
 
 	populate_spools(sorted_spools);
-	
+
       } else if (col == 3) {
 	// sort by color
 	// TODO: calculate color distance
@@ -322,14 +322,14 @@ void SpoolmanPanel::handle_spoolman_action(lv_event_t *e) {
 	std::vector<json> sorted_spools;
 	KUtils::sort_map_values<uint32_t, json>(spools, sorted_spools, [reversed](json &a, json &b) {
 	  auto x = a["/remaining_weight"_json_pointer].template get<double>();
-	  auto y = b["/remaining_weight"_json_pointer].template get<double>();	  
+	  auto y = b["/remaining_weight"_json_pointer].template get<double>();
 
 	  return reversed ? x > y : y > x;
 	});
 	sorted_by = (sorted_by ^ SORTED_BY_WT) & SORTED_BY_WT;
 
 	populate_spools(sorted_spools);
-	
+
       } else if (col == 5) {
 	// sort by length
 	bool reversed = sorted_by & SORTED_BY_LEN;
@@ -345,7 +345,7 @@ void SpoolmanPanel::handle_spoolman_action(lv_event_t *e) {
 
       }
     }
-    
+
     const char *selected = lv_table_get_cell_value(spool_table, row, col);
     const char *spool_id = lv_table_get_cell_value(spool_table, row, 0);
     spdlog::trace("selected {}, {}, value {}", row, col, spool_id);
@@ -374,7 +374,7 @@ void SpoolmanPanel::handle_spoolman_action(lv_event_t *e) {
 	      }
 	    }
 	  };
-	  
+
 	  ws.send_jsonrpc("server.spoolman.proxy", param, [this](json &d) {
 	    this->init();
 	  });
@@ -388,13 +388,13 @@ void SpoolmanPanel::handle_spoolman_action(lv_event_t *e) {
 	      }
 	    }
 	  };
-	  
+
 	  ws.send_jsonrpc("server.spoolman.proxy", param, [this](json &d) {
 	    this->init();
 	  });
 	}
       }
-      
+
     }
   } else if (code == LV_EVENT_DRAW_PART_BEGIN) {
     lv_obj_draw_part_dsc_t * dsc = lv_event_get_draw_part_dsc(e);

@@ -15,11 +15,11 @@ InitPanel::InitPanel(MainPanel &mp, BedMeshPanel &bmp, std::mutex& l)
   , lv_lock(l)
 {
   lv_obj_set_size(cont, LV_PCT(55), LV_SIZE_CONTENT);
-  lv_obj_align(cont, LV_ALIGN_TOP_MID, 0, 15);  
-  
+  lv_obj_align(cont, LV_ALIGN_TOP_MID, 0, 15);
+
   lv_obj_clear_flag(cont, LV_OBJ_FLAG_SCROLLABLE);
   lv_obj_set_style_bg_color(cont, lv_palette_darken(LV_PALETTE_GREY, 1), 0);
-  
+
   lv_obj_set_size(label, LV_PCT(100), LV_SIZE_CONTENT);
 
   Config *conf = Config::get_instance();
@@ -53,7 +53,7 @@ void InitPanel::connected(KWebSocketClient &ws) {
 
 	ws.send_jsonrpc("printer.info",
 			[](json& j) { State::get_instance()->set_data("printer_info", j, "/result"); });
-	
+
 	json h = {
 	  { "namespace", "fluidd" },
 	  { "key", "console" }
@@ -65,7 +65,7 @@ void InitPanel::connected(KWebSocketClient &ws) {
 	  { "namespace", "guppyscreen" }
 	};
 	ws.send_jsonrpc("server.database.get_item", h,
-			[](json& j) { State::get_instance()->set_data("guppysettings", j, "/result/value"); });	
+			[](json& j) { State::get_instance()->set_data("guppysettings", j, "/result/value"); });
 
 	// console
 	this->main_panel.subscribe();
@@ -74,7 +74,7 @@ void InitPanel::connected(KWebSocketClient &ws) {
 	ws.send_jsonrpc("server.info", [this](json &j) {
 	  spdlog::debug("server_info {}", j.dump());
 	  State::get_instance()->set_data("server_info", j, "/result");
-	  
+
 	  auto &components = j["/result/components"_json_pointer];
 	  if (!components.is_null()) {
 	    const auto &has_spoolman = components.template get<std::vector<std::string>>();
@@ -119,7 +119,7 @@ void InitPanel::connected(KWebSocketClient &ws) {
 			    std::lock_guard<std::mutex> lock(this->lv_lock);
 			    lv_obj_add_flag(this->cont, LV_OBJ_FLAG_HIDDEN);
 			    lv_obj_move_background(this->cont);
-					
+
 			  });
 	}
   });

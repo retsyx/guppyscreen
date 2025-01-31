@@ -95,7 +95,7 @@ SysInfoPanel::SysInfoPanel()
   lv_obj_set_flex_align(left_cont, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_START);
 
   lv_obj_clear_flag(right_cont, LV_OBJ_FLAG_SCROLLABLE);
-  lv_obj_set_size(right_cont, LV_PCT(50), LV_PCT(100));  
+  lv_obj_set_size(right_cont, LV_PCT(50), LV_PCT(100));
   lv_obj_set_flex_flow(right_cont, LV_FLEX_FLOW_COLUMN);
   lv_obj_set_flex_align(right_cont, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_START);
 
@@ -124,7 +124,7 @@ SysInfoPanel::SysInfoPanel()
   }
   lv_obj_add_event_cb(display_sleep_dd, &SysInfoPanel::_handle_callback,
 		      LV_EVENT_VALUE_CHANGED, this);
-  
+
   lv_obj_set_size(ll_cont, LV_PCT(100), LV_SIZE_CONTENT);
   lv_obj_set_style_pad_all(ll_cont, 0, 0);
   l = lv_label_create(ll_cont);
@@ -220,7 +220,7 @@ SysInfoPanel::SysInfoPanel()
                       LV_EVENT_VALUE_CHANGED, this);
 
 
-  lv_obj_add_flag(back_btn.get_container(), LV_OBJ_FLAG_FLOATING);	
+  lv_obj_add_flag(back_btn.get_container(), LV_OBJ_FLAG_FLOATING);
   lv_obj_align(back_btn.get_container(), LV_ALIGN_BOTTOM_RIGHT, 0, 0);
 }
 

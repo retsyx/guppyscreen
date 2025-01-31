@@ -36,7 +36,7 @@ class MainPanel : public NotifyConsumer {
   void subscribe();
   PrinterTunePanel& get_tune_panel();
   void enable_spoolman();
-  
+
   void create_panel();
   void create_sensors(json &temp_sensors);
   void create_fans(json &temp_fans);
@@ -56,7 +56,7 @@ class MainPanel : public NotifyConsumer {
 			       const void *heater_img,
 			       const char* text,
 			       lv_color_t color);
-  
+
   static void _handle_homing_cb(lv_event_t *event) {
     MainPanel *panel = (MainPanel*)event->user_data;
     panel->handle_homing_cb(event);
@@ -105,14 +105,14 @@ class MainPanel : public NotifyConsumer {
   ExtruderPanel extruder_panel;
   PromptPanel prompt_panel;
   SpoolmanPanel &spoolman_panel;
-  
+
   lv_style_t style;
 
   lv_obj_t *temp_cont;
   lv_obj_t *temp_chart;
 
   std::map<std::string, std::shared_ptr<SensorContainer>> sensors;
-  
+
   ButtonContainer homing_btn;
   ButtonContainer extrude_btn;
   ButtonContainer action_btn;

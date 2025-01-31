@@ -56,7 +56,7 @@ class SliderContainer {
     SliderContainer *obj = (SliderContainer*)event->user_data;
     obj->handle_value_update(event);
   };
-  
+
 
  private:
   lv_obj_t *cont;

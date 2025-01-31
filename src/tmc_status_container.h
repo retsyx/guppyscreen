@@ -25,7 +25,7 @@ class TmcStatusContainer {
  private:
   KWebSocketClient &ws;
   lv_obj_t *cont;
-  lv_obj_t* chart_cont;  
+  lv_obj_t* chart_cont;
   lv_obj_t *label;
   lv_obj_t *legend;
   lv_obj_t *chart;
@@ -44,7 +44,7 @@ class TmcStatusContainer {
   SpinBoxSelector tbl_sb;
   SpinBoxSelector hstrt_sb;
   SpinBoxSelector hend_sb;
-  
+
 };
 
 #endif // __TMC_STATUS_CONTAINER_H__

@@ -14,7 +14,7 @@ class PowerPanel {
     ~PowerPanel();
 
     void create_devices(json &j);
-    
+
     void foreground();
     void handle_callback(lv_event_t *event);
 
@@ -34,7 +34,7 @@ class PowerPanel {
     ButtonContainer back_btn;
 
     std::map<std::string, lv_obj_t*> devices;
-  
+
 };
 
 #endif //__POWER_PANEL_H__

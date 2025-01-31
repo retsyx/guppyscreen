@@ -13,7 +13,7 @@
 class WifiPanel {
  public:
   WifiPanel(std::mutex &l);
-  
+
   ~WifiPanel();
 
   void foreground();
@@ -28,12 +28,12 @@ class WifiPanel {
     WifiPanel *panel = (WifiPanel*)event->user_data;
     panel->handle_back_btn(event);
   };
-  
+
   static void _handle_callback(lv_event_t *event) {
     WifiPanel *panel = (WifiPanel*)event->user_data;
     panel->handle_callback(event);
   };
-  
+
   static void _handle_kb_input(lv_event_t *e) {
     WifiPanel *panel = (WifiPanel*)e->user_data;
     panel->handle_kb_input(e);
@@ -56,7 +56,7 @@ class WifiPanel {
   std::string cur_network;
   std::map<std::string, std::string> list_networks;
   std::map<std::string, int> wifi_name_db;
-  
+
 };
 
 #endif // __WIFI_PANEL_H__

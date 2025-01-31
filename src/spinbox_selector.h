@@ -25,7 +25,7 @@ class SpinBoxSelector {
   lv_obj_t *sb_cont;
   lv_obj_t *sb;
   std::function<void(int)> cb;
-  
+
 };
 
 #endif // __SPINBOX_SELECTOR_H__

@@ -23,10 +23,10 @@ PrinterSelectContainer::PrinterSelectContainer(PrinterSelectPanel &ps,
 {
   lv_obj_set_size(cont, LV_PCT(100), LV_SIZE_CONTENT);
   lv_obj_set_flex_flow(cont, LV_FLEX_FLOW_ROW);
-  lv_obj_clear_flag(cont, LV_OBJ_FLAG_SCROLLABLE);  
-  lv_obj_set_flex_align(cont, LV_FLEX_ALIGN_SPACE_EVENLY, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);  
+  lv_obj_clear_flag(cont, LV_OBJ_FLAG_SCROLLABLE);
+  lv_obj_set_flex_align(cont, LV_FLEX_ALIGN_SPACE_EVENLY, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
   lv_obj_set_style_border_width(cont, 2, 0);
-  
+
   lv_obj_t *l = lv_label_create(cont);
   lv_label_set_text(l, fmt::format("Name: {}\nIP: {}\nPort: {}", pname, ip, port).c_str());
   lv_obj_set_width(l, LV_PCT(55));
@@ -46,12 +46,12 @@ PrinterSelectContainer::PrinterSelectContainer(PrinterSelectPanel &ps,
 	lv_obj_t *obj = lv_obj_get_parent(lv_event_get_target(e));
 	uint32_t clicked_btn = lv_msgbox_get_active_btn(obj);
 	if(clicked_btn == 0) {
-	  
-	  
+
+
 	  Config *conf = Config::get_instance();
 	  conf->set<std::string>("/default_printer", ((PrinterSelectContainer*)e->user_data)->name);
 	  conf->save();
-		  
+
 	  auto init_script = conf->get<std::string>("/guppy_init_script");
 	  const fs::path script(init_script);
 	  if (fs::exists(script)) {
@@ -59,14 +59,14 @@ PrinterSelectContainer::PrinterSelectContainer(PrinterSelectPanel &ps,
 	  }
 
 	}
-	
+
 	lv_msgbox_close(obj);
 
       }, LV_EVENT_VALUE_CHANGED, p);
 
     }
   }, LV_EVENT_CLICKED, this);
-  
+
 
   btn = lv_btn_create(cont);
   l = lv_label_create(btn);
@@ -85,7 +85,7 @@ PrinterSelectContainer::PrinterSelectContainer(PrinterSelectPanel &ps,
 	  auto *p = (PrinterSelectContainer*)e->user_data;
 	  p->printer_select_panel.remove_printer(p->name);
 	}
-	
+
 	lv_msgbox_close(obj);
 
       }, LV_EVENT_VALUE_CHANGED, p);
@@ -105,16 +105,16 @@ lv_obj_t *PrinterSelectContainer::prompt(const std::string &prompt_text) {
 
   lv_obj_t *mbox1 = lv_msgbox_create(NULL, NULL, prompt_text.c_str(), btns, false);
   lv_obj_t *msg = ((lv_msgbox_t*)mbox1)->text;
-  lv_obj_set_style_text_align(msg, LV_TEXT_ALIGN_CENTER, 0);  
+  lv_obj_set_style_text_align(msg, LV_TEXT_ALIGN_CENTER, 0);
   lv_obj_set_width(msg, LV_PCT(100));
   lv_obj_center(msg);
-  
+
   lv_obj_t *btnm = lv_msgbox_get_btns(mbox1);
   lv_btnmatrix_set_btn_ctrl(btnm, 0, LV_BTNMATRIX_CTRL_CHECKED);
   lv_btnmatrix_set_btn_ctrl(btnm, 1, LV_BTNMATRIX_CTRL_CHECKED);
   lv_obj_add_flag(btnm, LV_OBJ_FLAG_FLOATING);
   lv_obj_align(btnm, LV_ALIGN_BOTTOM_MID, 0, 0);
-  
+
   auto hscale = (double)lv_disp_get_physical_ver_res(NULL) / 480.0;
 
   lv_obj_set_size(btnm, LV_PCT(90), 50 *hscale);
@@ -141,7 +141,7 @@ PrinterSelectPanel::PrinterSelectPanel()
 {
   lv_obj_move_background(cont);
   lv_obj_set_size(cont, LV_PCT(100), LV_PCT(100));
-  lv_obj_set_style_pad_all(cont, 0, 0);  
+  lv_obj_set_style_pad_all(cont, 0, 0);
   lv_obj_set_flex_flow(cont, LV_FLEX_FLOW_COLUMN);
 
   lv_obj_set_flex_flow(top, LV_FLEX_FLOW_ROW);
@@ -244,7 +244,7 @@ PrinterSelectPanel::PrinterSelectPanel()
   lv_obj_set_height(right, LV_PCT(100));
   lv_obj_set_flex_flow(right, LV_FLEX_FLOW_ROW_WRAP);
 
-  Config *conf = Config::get_instance();    
+  Config *conf = Config::get_instance();
   const auto &configured_printers = conf->get<json>("/printers");
 
   for (auto &el : configured_printers.items()) {
@@ -259,7 +259,7 @@ PrinterSelectPanel::PrinterSelectPanel()
 
   lv_obj_add_flag(kb, LV_OBJ_FLAG_HIDDEN);
 
-  lv_obj_add_flag(back_btn.get_container(), LV_OBJ_FLAG_FLOATING);  
+  lv_obj_add_flag(back_btn.get_container(), LV_OBJ_FLAG_FLOATING);
   lv_obj_align(back_btn.get_container(), LV_ALIGN_BOTTOM_RIGHT, 0, -20);
 }
 
@@ -296,7 +296,7 @@ void PrinterSelectPanel::remove_printer(const std::string &n) {
   if (el != printers.end()) {
     printers.erase(el);
 
-    Config *conf = Config::get_instance();    
+    Config *conf = Config::get_instance();
     auto printers = conf->get<json>("/printers");
     printers.erase(n);
     conf->set<json>("/printers", printers);
@@ -309,7 +309,7 @@ void PrinterSelectPanel::add_printer(const std::string &n,
 				     uint32_t port) {
   printers.insert({n, std::make_shared<PrinterSelectContainer>(*this, right, n, ip, port)});
 }
-  
+
 void PrinterSelectPanel::foreground() {
   lv_obj_move_foreground(cont);
 }

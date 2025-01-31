@@ -22,7 +22,7 @@ class Selector {
 	   uint32_t default_idx,
 	   lv_event_cb_t cb,
 	   void *cb_data);
-  
+
   ~Selector();
   lv_obj_t *get_container();
   lv_obj_t *get_selector();

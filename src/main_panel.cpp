@@ -28,7 +28,7 @@ MainPanel::MainPanel(KWebSocketClient &websocket,
   , ws(websocket)
   , homing_panel(ws, lock)
   , fan_panel(ws, lock)
-  , led_panel(ws, lock)    
+  , led_panel(ws, lock)
   , tabview(lv_tabview_create(lv_scr_act(), LV_DIR_LEFT, 60))
   , main_tab(lv_tabview_add_tab(tabview, HOME_SYMBOL))
   , macros_tab(lv_tabview_add_tab(tabview, MACROS_SYMBOL))
@@ -60,7 +60,7 @@ MainPanel::MainPanel(KWebSocketClient &websocket,
     lv_style_set_border_width(&style, 0);
     lv_style_set_bg_color(&style, lv_palette_darken(LV_PALETTE_GREY, 4));
 
-    ws.register_notify_update(this);    
+    ws.register_notify_update(this);
 }
 
 MainPanel::~MainPanel() {
@@ -106,7 +106,7 @@ void MainPanel::init(json &j) {
   printertune_panel.init(j);
 }
 
-void MainPanel::consume(json &j) {  
+void MainPanel::consume(json &j) {
   std::lock_guard<std::mutex> lock(lv_lock);
   for (const auto &el : sensors) {
     auto target_value = j[json::json_pointer(fmt::format("/params/0/{}/target", el.first))];
@@ -121,7 +121,7 @@ void MainPanel::consume(json &j) {
       el.second->update_series(value);
       el.second->update_value(value);
     }
-  }  
+  }
 }
 
 static void scroll_begin_event(lv_event_t * e)
@@ -136,7 +136,7 @@ static void scroll_begin_event(lv_event_t * e)
 void MainPanel::create_panel() {
   lv_obj_clear_flag(lv_tabview_get_content(tabview), LV_OBJ_FLAG_SCROLLABLE);
   lv_obj_add_event_cb(lv_tabview_get_content(tabview), scroll_begin_event, LV_EVENT_SCROLL_BEGIN, NULL);
-  
+
   lv_obj_t * tab_btns = lv_tabview_get_tab_btns(tabview);
   lv_obj_set_style_bg_color(tab_btns, lv_palette_main(LV_PALETTE_GREY), LV_STATE_CHECKED | LV_PART_ITEMS);
   lv_obj_set_style_outline_width(tab_btns, 0, LV_PART_ITEMS | LV_STATE_FOCUS_KEY | LV_STATE_FOCUS_KEY);
@@ -152,7 +152,7 @@ void MainPanel::create_panel() {
   lv_obj_set_style_pad_all(setting_tab, 0, 0);
 
   create_main(main_tab);
-  
+
 }
 
 void MainPanel::handle_homing_cb(lv_event_t *event) {
@@ -203,7 +203,7 @@ void MainPanel::create_main(lv_obj_t * parent)
     lv_obj_set_height(main_cont, LV_PCT(100));
 
     lv_obj_set_flex_grow(main_cont, 1);
-    lv_obj_set_grid_dsc_array(main_cont, grid_main_col_dsc, grid_main_row_dsc);    
+    lv_obj_set_grid_dsc_array(main_cont, grid_main_col_dsc, grid_main_row_dsc);
 
     lv_obj_set_grid_cell(homing_btn.get_container(), LV_GRID_ALIGN_CENTER, 2, 1, LV_GRID_ALIGN_CENTER, 0, 1);
     lv_obj_set_grid_cell(extrude_btn.get_container(), LV_GRID_ALIGN_CENTER, 3, 1, LV_GRID_ALIGN_CENTER, 0, 1);
@@ -217,7 +217,7 @@ void MainPanel::create_main(lv_obj_t * parent)
 
     lv_obj_set_flex_flow(temp_cont, LV_FLEX_FLOW_ROW_WRAP);
     lv_obj_set_grid_cell(temp_cont, LV_GRID_ALIGN_START, 0, 2, LV_GRID_ALIGN_CENTER, 0, 2);
-    
+
     lv_obj_align(temp_chart, LV_ALIGN_CENTER, 0, 0);
     lv_obj_set_size(temp_chart, LV_PCT(45), LV_PCT(40));
     lv_obj_set_style_size(temp_chart, 0, LV_PART_INDICATOR);
@@ -247,7 +247,7 @@ void MainPanel::create_sensors(json &temp_sensors) {
       } else if (color == "purple") {
 	color_code = lv_palette_main(LV_PALETTE_PURPLE);
       } else if (color == "blue") {
-	color_code = lv_palette_main(LV_PALETTE_BLUE);	
+	color_code = lv_palette_main(LV_PALETTE_BLUE);
       }
     } else {
       color_code = lv_palette_main((lv_palette_t)sensor.value()["color"].template get<int>());

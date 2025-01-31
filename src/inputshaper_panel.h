@@ -18,7 +18,7 @@ class InputShaperPanel {
   void handle_image_clicked(lv_event_t *event);
   void handle_macro_response(json &j);
   void handle_update_slider(lv_event_t *event);
-  
+
   static void _handle_callback(lv_event_t *event) {
     InputShaperPanel *panel = (InputShaperPanel*)event->user_data;
     panel->handle_callback(event);
@@ -42,7 +42,7 @@ class InputShaperPanel {
 			 lv_obj_t *slider,
 			 lv_obj_t *slider_label,
 			 lv_obj_t *dd);
-  
+
  private:
   KWebSocketClient &ws;
   std::mutex &lv_lock;
@@ -91,7 +91,7 @@ class InputShaperPanel {
   json calibrate_output;
 
   static std::vector<std::string> shapers;
-  
+
 };
 
 #endif // __INPUTSHAPER_PANEL_H__

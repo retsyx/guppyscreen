@@ -35,12 +35,12 @@ class BedMeshPanel : public NotifyConsumer {
     BedMeshPanel *panel = (BedMeshPanel*)event->user_data;
     panel->handle_profile_action(event);
   };
-  
+
   static void _handle_prompt_save(lv_event_t *event) {
     BedMeshPanel *panel = (BedMeshPanel*)event->user_data;
     panel->handle_prompt_save(event);
   };
-  
+
   static void _handle_prompt_cancel(lv_event_t *event) {
     BedMeshPanel *panel = (BedMeshPanel*)event->user_data;
     panel->handle_prompt_cancel(event);

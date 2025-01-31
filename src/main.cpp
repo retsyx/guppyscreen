@@ -12,7 +12,6 @@
 
 namespace fs = std::experimental::filesystem;
 
-
 #ifdef SIMULATOR
 #define SDL_MAIN_HANDLED /*To fix SDL's "undefined reference to WinMain" issue*/
 #include <SDL2/SDL.h>
@@ -69,7 +68,7 @@ static void hal_init(lv_color_t primary, lv_color_t secondary) {
     uint32_t height;
     uint32_t dpi;
     fbdev_get_sizes(&width, &height, &dpi);
-    
+
     disp_drv.hor_res    = width;
     disp_drv.ver_res    = height;
     Config *conf = Config::get_instance();
@@ -103,7 +102,7 @@ static void hal_init(lv_color_t primary, lv_color_t secondary) {
         lv_tc_indev_drv_init(&indev_drv_1, evdev_read);
       }
     }
-      
+
     lv_indev_drv_register(&indev_drv_1);
 }
 
@@ -145,7 +144,7 @@ static void hal_init(lv_color_t primary, lv_color_t secondary)
     ? lv_theme_default_init(NULL, primary, secondary, true, &lv_font_montserrat_12)
     : lv_theme_default_init(NULL, primary, secondary, true, &lv_font_montserrat_16);
   lv_disp_set_theme(disp, th);
- 
+
   lv_group_t * g = lv_group_create();
   lv_group_set_default(g);
 

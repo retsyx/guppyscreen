@@ -151,7 +151,7 @@ void Config::init(std::string config_path, const std::string thumbdir) {
   if (display_sleep.is_null()) {
     data["/display_sleep_sec"_json_pointer] = 600;
   }
-  
+
   std::ofstream o(config_path);
   o << std::setw(2) << data << std::endl;
 }

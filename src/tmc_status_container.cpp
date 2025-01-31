@@ -59,12 +59,12 @@ TmcStatusContainer::TmcStatusContainer(KWebSocketClient &c,
 {
   lv_obj_set_size(cont, LV_PCT(100), LV_SIZE_CONTENT);
   lv_obj_set_flex_align(cont, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
-  
+
   lv_obj_set_style_pad_all(cont, 0, 0);
   lv_obj_set_style_pad_bottom(cont, 15, 0);
   lv_obj_set_style_border_side(cont, LV_BORDER_SIDE_BOTTOM, 0);
   lv_obj_set_style_border_width(cont, 2, 0);
-  
+
   lv_obj_set_flex_flow(cont, LV_FLEX_FLOW_ROW_WRAP_REVERSE);
 
   lv_obj_set_width(label, LV_PCT(100));
@@ -75,27 +75,27 @@ TmcStatusContainer::TmcStatusContainer(KWebSocketClient &c,
   lv_obj_set_flex_flow(chart_cont, LV_FLEX_FLOW_COLUMN);
   lv_obj_set_size(chart_cont, LV_PCT(70), LV_SIZE_CONTENT);
   lv_obj_set_style_pad_left(chart_cont, 50 * scale, 0);
-  
+
   lv_obj_set_size(legend, LV_PCT(100), LV_SIZE_CONTENT);
-  lv_obj_set_style_pad_all(legend, 0, 0);  
+  lv_obj_set_style_pad_all(legend, 0, 0);
   lv_obj_set_flex_flow(legend, LV_FLEX_FLOW_ROW);
-  
+
   lv_obj_t *axis_label = lv_label_create(legend);
   lv_label_set_text(axis_label, "sg_result");
   lv_obj_set_style_text_color(axis_label, lv_palette_main(LV_PALETTE_ORANGE), 0);
 
   axis_label = lv_label_create(legend);
   lv_label_set_text(axis_label, "i_rms (mA)");
-  lv_obj_set_style_text_color(axis_label, lv_palette_main(LV_PALETTE_RED), 0);  
+  lv_obj_set_style_text_color(axis_label, lv_palette_main(LV_PALETTE_RED), 0);
 
   axis_label = lv_label_create(legend);
   lv_label_set_text(axis_label, "semin * 32");
-  lv_obj_set_style_text_color(axis_label, lv_palette_main(LV_PALETTE_BLUE), 0);  
+  lv_obj_set_style_text_color(axis_label, lv_palette_main(LV_PALETTE_BLUE), 0);
 
   axis_label = lv_label_create(legend);
   lv_label_set_text(axis_label, "(semin + semax + 1) * 32");
   lv_obj_set_style_text_color(axis_label, lv_palette_main(LV_PALETTE_GREEN), 0);
-  
+
   lv_obj_set_style_size(chart, 0, LV_PART_INDICATOR);
 
   lv_chart_set_range(chart, LV_CHART_AXIS_PRIMARY_Y, 0, 1600);
@@ -113,7 +113,7 @@ TmcStatusContainer::TmcStatusContainer(KWebSocketClient &c,
   lv_obj_set_style_pad_column(stepper_config, 0, 0);
   lv_obj_set_style_pad_all(stepper_config, 0, 0);
   lv_obj_set_flex_align(stepper_config, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
-  
+
 }
 
 TmcStatusContainer::~TmcStatusContainer()
@@ -131,7 +131,7 @@ void TmcStatusContainer::update(json &stepper) {
     if (!v.is_null()) {
       lv_chart_set_next_value(chart, irms_series, v.template get<double>());
     }
-    
+
     v = stepper["/semin"_json_pointer];
     int semin = 0;
     if (!v.is_null()) {
@@ -144,14 +144,14 @@ void TmcStatusContainer::update(json &stepper) {
     if (!v.is_null()) {
       auto semax = v.template get<int>();
       lv_chart_set_next_value(chart, semax_series, (semin + semax + 1) * 32);
-      semax_sb.update_value(semax);      
+      semax_sb.update_value(semax);
     }
 
     v = stepper["/seup"_json_pointer];
     if (!v.is_null()) {
       seup_sb.update_value(v.template get<int>());
     }
-    
+
     v = stepper["/sedn"_json_pointer];
     if (!v.is_null()) {
       sedn_sb.update_value(v.template get<int>());
@@ -171,7 +171,7 @@ void TmcStatusContainer::update(json &stepper) {
     if (!v.is_null()) {
       hstrt_sb.update_value(v.template get<int>());
     }
-    
+
     v = stepper["/hend"_json_pointer];
     if (!v.is_null()) {
       hend_sb.update_value(v.template get<int>());

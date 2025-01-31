@@ -18,7 +18,7 @@ LedPanel::LedPanel(KWebSocketClient &websocket_client, std::mutex &lock)
     lv_obj_set_size(ledpanel_cont, lv_pct(100), lv_pct(100));
 
     lv_obj_set_style_pad_all(ledpanel_cont, 0, 0);
-    
+
     lv_obj_center(leds_cont);
     lv_obj_set_size(leds_cont, lv_pct(80), lv_pct(100));
     lv_obj_set_flex_flow(leds_cont, LV_FLEX_FLOW_COLUMN);
@@ -84,7 +84,7 @@ void LedPanel::init(json &l) {
   if (leds.size() > 3) {
     lv_obj_add_flag(leds_cont, LV_OBJ_FLAG_SCROLLABLE);
   } else {
-    lv_obj_clear_flag(leds_cont, LV_OBJ_FLAG_SCROLLABLE);    
+    lv_obj_clear_flag(leds_cont, LV_OBJ_FLAG_SCROLLABLE);
   }
 
   lv_obj_move_foreground(back_btn.get_container());
@@ -99,7 +99,7 @@ void LedPanel::foreground() {
       int v = static_cast<int>(led_value.template get<double>() * 100);
       l.second->update_value(v);
     }
-    
+
     led_value = State::get_instance()
       ->get_data(json::json_pointer(fmt::format("/printer_state/{}/color_data", l.first)));
     if (!led_value.is_null() && led_value.size() > 0) {

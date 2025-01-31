@@ -14,7 +14,7 @@ MacrosPanel::MacrosPanel(KWebSocketClient &c, std::mutex &l, lv_obj_t *parent)
 {
   lv_obj_set_size(cont, LV_PCT(100), LV_PCT(100));
   lv_obj_set_style_pad_all(cont, 0, 0);
-  
+
   lv_obj_set_flex_flow(cont, LV_FLEX_FLOW_COLUMN);
   lv_obj_set_style_pad_row(cont, 0, 0);
 
@@ -25,13 +25,13 @@ MacrosPanel::MacrosPanel(KWebSocketClient &c, std::mutex &l, lv_obj_t *parent)
   lv_label_set_text(label, "Show Hidden");
   lv_obj_align_to(label, show_hide_switch, LV_ALIGN_OUT_LEFT_MID, 0, 0);
   lv_obj_add_event_cb(show_hide_switch, &MacrosPanel::_handle_hide_show, LV_EVENT_VALUE_CHANGED, this);
-  
+
   lv_obj_set_flex_grow(top_cont, 1);
   lv_obj_set_style_pad_all(top_cont, 0, 0);
   lv_obj_set_width(top_cont, LV_PCT(100));
   lv_obj_set_flex_flow(top_cont, LV_FLEX_FLOW_COLUMN);
   lv_obj_set_style_pad_row(top_cont, 0, 0);
-  
+
   lv_obj_add_flag(kb, LV_OBJ_FLAG_HIDDEN);
   lv_obj_set_style_text_font(kb, &lv_font_montserrat_16, LV_STATE_DEFAULT);
 }
@@ -65,7 +65,7 @@ void MacrosPanel::populate() {
       auto hidden_json = macro_settings[json::json_pointer(fmt::format("/{}/hidden", k))];
       bool hidden = !hidden_json.is_null() ? hidden_json.template get<bool>() : false;
       macro_items.push_back(std::make_shared<MacroItem>(ws, top_cont, k, v, kb, hidden));
-      
+
       // if (i % 2 == 0) {
       // 	macro_items.push_back(std::make_shared<MacroItem>(ws, top_cont, k, v, kb, mixed, hidden));
       // } else {

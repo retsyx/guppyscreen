@@ -20,7 +20,7 @@ class SensorContainer {
 		  std::string name,
 		  lv_obj_t *chart,
 		  lv_chart_series_t *chart_series);
-		  
+
   SensorContainer(KWebSocketClient &c,
 		  lv_obj_t *parent,
 		  const void *img,
@@ -33,7 +33,7 @@ class SensorContainer {
 		  std::string name,
 		  lv_obj_t *chart,
 		  lv_chart_series_t *chart_series);
-  
+
   ~SensorContainer();
 
   lv_obj_t *get_sensor();
@@ -62,7 +62,7 @@ class SensorContainer {
   lv_obj_t *chart;
   lv_chart_series_t *series;
   std::time_t last_updated_ts;
-  
+
 };
 
 #endif // __SENSOR_CONTAINER_H__

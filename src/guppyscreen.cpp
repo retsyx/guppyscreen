@@ -4,7 +4,7 @@
 #ifndef OS_ANDROID
   #include "lv_drivers/display/fbdev.h"
   #include "lv_drivers/indev/evdev.h"
-  
+
   #include "spdlog/sinks/rotating_file_sink.h"
   #include "spdlog/sinks/stdout_sinks.h"
 
@@ -55,8 +55,8 @@ GuppyScreen *GuppyScreen::init(std::function<void(lv_color_t, lv_color_t)> hal_i
   Config *conf = Config::get_instance();
   const std::string ll_path = conf->df() + "log_level";
   auto ll = spdlog::level::from_str(
-      conf->get_json("/printers").empty() 
-      ? "debug" 
+      conf->get_json("/printers").empty()
+      ? "debug"
       : conf->get<std::string>(ll_path));
 
   auto selected_theme = conf->get_json("/theme").empty()

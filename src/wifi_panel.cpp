@@ -47,24 +47,24 @@ WifiPanel::WifiPanel(std::mutex &l)
   lv_obj_add_flag(spinner, LV_OBJ_FLAG_FLOATING);
   lv_obj_align(spinner, LV_ALIGN_CENTER, 0, 0);
 
-  lv_obj_add_flag(back_btn.get_container(), LV_OBJ_FLAG_FLOATING);  
+  lv_obj_add_flag(back_btn.get_container(), LV_OBJ_FLAG_FLOATING);
   lv_obj_align(back_btn.get_container(), LV_ALIGN_BOTTOM_RIGHT, 0, -20);
-  
+
   lv_obj_set_flex_grow(top_cont, 1);
   lv_obj_set_flex_flow(top_cont, LV_FLEX_FLOW_ROW);
   lv_obj_clear_flag(top_cont, LV_OBJ_FLAG_SCROLLABLE);
   lv_obj_set_style_border_width(top_cont, 0, 0);
   lv_obj_set_width(top_cont, LV_PCT(100));
-  
+
   lv_obj_set_height(wifi_table, LV_PCT(90));
   // lv_obj_remove_style(wifi_table, NULL, LV_PART_ITEMS | LV_STATE_PRESSED);
   lv_obj_add_flag(wifi_table, LV_OBJ_FLAG_HIDDEN);
 
   auto screen_width = lv_disp_get_physical_hor_res(NULL) / 2 - 100;
-  
+
   lv_table_set_col_width(wifi_table, 0, screen_width);
   lv_table_set_col_width(wifi_table, 1, 100);
-  
+
   lv_obj_add_event_cb(wifi_table, &WifiPanel::_handle_callback, LV_EVENT_VALUE_CHANGED, this);
   lv_obj_add_event_cb(wifi_table, &WifiPanel::_handle_callback, LV_EVENT_SIZE_CHANGED, this);
   lv_obj_add_event_cb(wifi_table, draw_part_event_cb, LV_EVENT_DRAW_PART_BEGIN, NULL);
@@ -79,7 +79,7 @@ WifiPanel::WifiPanel(std::mutex &l)
   lv_obj_set_size(prompt_cont, LV_PCT(100), LV_PCT(100));
   lv_obj_clear_flag(prompt_cont, LV_OBJ_FLAG_SCROLLABLE);
   lv_obj_set_style_border_width(prompt_cont, 0, 0);
-  
+
   lv_obj_align(wifi_label, LV_ALIGN_TOP_MID, 0, 10);
   lv_obj_align(password_input, LV_ALIGN_TOP_MID, 0, 40);
 
@@ -214,13 +214,13 @@ void WifiPanel::handle_wpa_event(const std::string &event) {
       for (auto it = wifi_name_db.begin(); it != wifi_name_db.end(); ++it) {
 	pairs.push_back(*it);
       }
-      
+
       std::sort(pairs.begin(), pairs.end(), [=](std::pair<std::string, int>& a,
 						std::pair<std::string, int>& b)
       {
 	return a.second > b.second;
       });
-      
+
       std::lock_guard<std::mutex> lock(lv_lock);
 
       uint32_t index = 0;
@@ -276,7 +276,7 @@ void WifiPanel::handle_kb_input(lv_event_t *e)
     lv_obj_add_flag(password_input, LV_OBJ_FLAG_HIDDEN);
   } else if (code == LV_EVENT_CLICKED) {
       lv_obj_t *target = lv_event_get_target(e);
-      if (target != kb && target != password_input) {  
+      if (target != kb && target != password_input) {
         lv_event_send(password_input, LV_EVENT_DEFOCUSED, NULL);
       }
   }

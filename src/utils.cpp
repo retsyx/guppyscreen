@@ -94,7 +94,7 @@ namespace KUtils {
       std::string df_host = conf->get<std::string>(conf->df() + "moonraker_host");
       std::string fname = relative_path.substr(relative_path.find_last_of("/\\") + 1);
       std::string fullpath = fmt::format("{}/{}", conf->get<std::string>("/thumbnail_path"), fname);
-    
+
       // download thumbnail
       if (is_running_local()) {
 	spdlog::debug("running locally, skipping thumbnail downloads");
@@ -237,7 +237,7 @@ namespace KUtils {
       os << p.tm_min << "m ";
 
     os << p.tm_sec << "s";
-    
+
     return os.str();
   }
 

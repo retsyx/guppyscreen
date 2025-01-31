@@ -27,7 +27,7 @@ class PrintStatusPanel : public NotifyConsumer {
 
   void handle_metadata(const std::string &gcode_file, json &j);
   void handle_callback(lv_event_t *event);
-  
+
   static void _handle_callback(lv_event_t *event) {
     PrintStatusPanel *panel = (PrintStatusPanel*)event->user_data;
     panel->handle_callback(event);

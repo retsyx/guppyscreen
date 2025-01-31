@@ -17,7 +17,7 @@ PowerPanel::PowerPanel(KWebSocketClient &websocket_client, std::mutex &l)
   lv_obj_set_flex_flow(cont, LV_FLEX_FLOW_COLUMN);
   lv_obj_set_flex_align(cont, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_START);
 
-  lv_obj_add_flag(back_btn.get_container(), LV_OBJ_FLAG_FLOATING);	
+  lv_obj_add_flag(back_btn.get_container(), LV_OBJ_FLAG_FLOATING);
   lv_obj_align(back_btn.get_container(), LV_ALIGN_BOTTOM_RIGHT, 0, 0);
 }
 
@@ -44,7 +44,7 @@ void PowerPanel::create_device(json &j) {
     lv_label_set_text(l, name.c_str());
     lv_obj_align(l, LV_ALIGN_LEFT_MID, 0, 0);
 
-    power_device_toggle = lv_switch_create(power_device_toggle_cont); 
+    power_device_toggle = lv_switch_create(power_device_toggle_cont);
     lv_obj_align(power_device_toggle, LV_ALIGN_RIGHT_MID, 0, 0);
 
     lv_obj_add_event_cb(power_device_toggle, &PowerPanel::_handle_callback,
@@ -54,10 +54,10 @@ void PowerPanel::create_device(json &j) {
   } else {
     power_device_toggle = entry->second;
   }
-  
+
   std::string status = j["status"].template get<std::string>();
   spdlog::debug("Fetched initial status for power device {}: {}", name, status);
-  
+
   if (status == "on") {
     lv_obj_add_state(power_device_toggle, LV_STATE_CHECKED);
   } else {

@@ -56,7 +56,7 @@ PrintPanel::PrintPanel(KWebSocketClient &websocket, std::mutex &lock, PrintStatu
 
   // file view buttons
   lv_obj_t * label = NULL;
-  
+
   label = lv_label_create(refresh_btn);
   lv_label_set_text(label, LV_SYMBOL_REFRESH " Reload");
   lv_obj_center(label);
@@ -72,7 +72,7 @@ PrintPanel::PrintPanel(KWebSocketClient &websocket, std::mutex &lock, PrintStatu
   lv_obj_add_event_cb(refresh_btn, &PrintPanel::_handle_btns, LV_EVENT_CLICKED, this);
   lv_obj_add_event_cb(modified_sort_btn, &PrintPanel::_handle_btns, LV_EVENT_CLICKED, this);
   lv_obj_add_event_cb(az_sort_btn, &PrintPanel::_handle_btns, LV_EVENT_CLICKED, this);
-  
+
   lv_obj_set_size(file_table_btns, LV_PCT(100), LV_SIZE_CONTENT);
   lv_obj_set_style_pad_all(file_table_btns, 2, 0);
 
@@ -94,16 +94,16 @@ PrintPanel::PrintPanel(KWebSocketClient &websocket, std::mutex &lock, PrintStatu
   lv_obj_set_grid_dsc_array(file_view, grid_main_col_dsc, grid_main_row_dsc);
   lv_obj_set_grid_cell(file_panel.get_container(), LV_GRID_ALIGN_CENTER, 0, 3, LV_GRID_ALIGN_CENTER, 0, 1);
 
-  lv_obj_set_grid_cell(status_btn.get_container(), LV_GRID_ALIGN_CENTER, 0, 1, LV_GRID_ALIGN_END, 1, 1);  
+  lv_obj_set_grid_cell(status_btn.get_container(), LV_GRID_ALIGN_CENTER, 0, 1, LV_GRID_ALIGN_END, 1, 1);
   lv_obj_set_grid_cell(print_btn.get_container(), LV_GRID_ALIGN_CENTER, 1, 1, LV_GRID_ALIGN_END, 1, 1);
   lv_obj_set_grid_cell(back_btn.get_container(), LV_GRID_ALIGN_CENTER, 2, 1, LV_GRID_ALIGN_END, 1, 1);
 
   lv_obj_move_foreground(back_btn.get_container());
   lv_obj_move_foreground(print_btn.get_container());
-  lv_obj_move_foreground(status_btn.get_container());      
+  lv_obj_move_foreground(status_btn.get_container());
 
   // prompt
-  lv_obj_add_flag(prompt_cont, LV_OBJ_FLAG_HIDDEN);  
+  lv_obj_add_flag(prompt_cont, LV_OBJ_FLAG_HIDDEN);
   lv_obj_set_size(prompt_cont, LV_PCT(100), LV_PCT(100));
   lv_obj_clear_flag(prompt_cont, LV_OBJ_FLAG_SCROLLABLE);
   lv_obj_set_style_bg_opa(prompt_cont, LV_OPA_70, 0);
@@ -111,7 +111,7 @@ PrintPanel::PrintPanel(KWebSocketClient &websocket, std::mutex &lock, PrintStatu
   lv_obj_set_size(msgbox, LV_PCT(60), LV_PCT(30));
   lv_obj_set_style_border_width(msgbox, 2, 0);
   lv_obj_set_style_bg_color(msgbox, lv_palette_darken(LV_PALETTE_GREY, 1), 0);
-  
+
   lv_obj_align(msgbox, LV_ALIGN_CENTER, 0, 0);
 
   lv_obj_add_event_cb(job_btn, &PrintPanel::_handle_btns, LV_EVENT_CLICKED, this);
@@ -122,7 +122,7 @@ PrintPanel::PrintPanel(KWebSocketClient &websocket, std::mutex &lock, PrintStatu
 
   lv_obj_add_event_cb(queue_btn, &PrintPanel::_handle_btns, LV_EVENT_CLICKED, this);
   lv_obj_align(queue_btn, LV_ALIGN_BOTTOM_LEFT, 0, 0);
-  
+
   label = lv_label_create(job_btn);
   lv_label_set_text(label, "View Job");
   lv_obj_center(label);
@@ -159,12 +159,12 @@ void PrintPanel::populate_files(json &j) {
   show_dir(cur_dir, SORTED_BY_MODIFIED);
 }
 
-void PrintPanel::consume(json &j) {  
+void PrintPanel::consume(json &j) {
   json &pstat_state = j["/params/0/print_stats/state"_json_pointer];
   if (pstat_state.is_null()) {
     return;
   }
-  
+
   std::lock_guard<std::mutex> lock(lv_lock);
   if(pstat_state.template get<std::string>() != "printing"
      && pstat_state.template get<std::string>() != "paused") {
@@ -199,7 +199,7 @@ void PrintPanel::foreground() {
     ->get_data("/printer_state/print_stats/state"_json_pointer);
   spdlog::debug("print panel print stats {}",
 		pstat_state.is_null() ? "nil" : pstat_state.template get<std::string>());
-    
+
   if (!pstat_state.is_null()
       && pstat_state.template get<std::string>() != "printing"
       && pstat_state.template get<std::string>() != "paused") {
@@ -207,7 +207,7 @@ void PrintPanel::foreground() {
   } else {
     status_btn.enable();
   }
-  
+
   lv_obj_move_foreground(files_cont);
 }
 
@@ -226,7 +226,7 @@ void PrintPanel::handle_callback(lv_event_t *e) {
     }
 
     str_fn = lv_table_get_cell_value(file_table, row, col);
-    
+
     const char *filename = str_fn+5; // +5 skips the LV_SYMBOL and spaces
     if (std::memcmp(LV_SYMBOL_DIRECTORY, str_fn, 3) == 0) {
       if ((strcmp(filename, "..") == 0)) {
@@ -278,7 +278,7 @@ void PrintPanel::show_dir(Tree *dir, uint32_t sort_type) {
 	return reversed ? x.name > y.name : y.name > x.name;
       });
   }
-      
+
   sorted_by = (sorted_by ^ sort_type) & sort_type;
   for (const auto &c : sorted_files) {
     if (c.is_leaf()) {
@@ -320,7 +320,7 @@ void PrintPanel::show_file_detail(Tree *f) {
 }
 
 void PrintPanel::handle_metadata(Tree *f, json &j) {
-  spdlog::trace("handling metadata callback");  
+  spdlog::trace("handling metadata callback");
   if (f->is_leaf()) {
     if (j.contains("result")) {
       std::lock_guard<std::mutex> lock(lv_lock);
@@ -334,7 +334,7 @@ void PrintPanel::handle_back_btn(lv_event_t *event) {
   lv_obj_t *btn = lv_event_get_current_target(event);
   if (btn == back_btn.get_container()) {
     lv_obj_move_background(files_cont);
-    print_status.background();    
+    print_status.background();
   }
 }
 
@@ -346,12 +346,12 @@ void PrintPanel::handle_print_callback(lv_event_t *event) {
       ->get_data("/printer_state/print_stats/state"_json_pointer);
     spdlog::debug("print panel print stats {}",
 		  pstat_state.is_null() ? "nil" : pstat_state.template get<std::string>());
-    
+
     if (!pstat_state.is_null()
 	&& pstat_state.template get<std::string>() != "printing"
 	&& pstat_state.template get<std::string>() != "paused") {
       spdlog::debug("printer ready to print. print file {}", cur_file->full_path);
-	
+
       // ws.send_jsonrpc("printer.gcode.script",
       // 		    json::parse(R"({"script":"PRINT_PREPARE_CLEAR"})"));
 
@@ -397,7 +397,7 @@ void PrintPanel::handle_btns(lv_event_t *event) {
 
     if (btn == refresh_btn) {
       subscribe();
-      
+
     } else if (btn == modified_sort_btn) {
       show_dir(cur_dir, SORTED_BY_MODIFIED);
 

@@ -82,7 +82,7 @@ SliderContainer::SliderContainer(lv_obj_t *parent,
   lv_obj_align(cont, LV_ALIGN_CENTER, 0, 0);
 
   lv_label_set_text(label, label_text);
-  lv_obj_set_width(label, LV_PCT(100));  
+  lv_obj_set_width(label, LV_PCT(100));
 
   lv_obj_clear_flag(control_cont, LV_OBJ_FLAG_SCROLLABLE);
   lv_obj_set_size(control_cont, lv_pct(100), LV_SIZE_CONTENT);
@@ -91,7 +91,7 @@ SliderContainer::SliderContainer(lv_obj_t *parent,
   lv_obj_set_style_pad_all(control_cont, 0, 0);
   lv_obj_set_style_pad_bottom(control_cont, 7, 0);
 
-  lv_obj_clear_flag(slider_cont, LV_OBJ_FLAG_SCROLLABLE);    
+  lv_obj_clear_flag(slider_cont, LV_OBJ_FLAG_SCROLLABLE);
   lv_obj_set_size(slider_cont, LV_PCT(45), LV_SIZE_CONTENT);
   lv_obj_set_style_pad_all(slider_cont, 0, 0);
 

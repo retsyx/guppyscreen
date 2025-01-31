@@ -15,24 +15,24 @@ MiniPrintStatus::MiniPrintStatus(lv_obj_t *parent,
   lv_color_t cur_bg = lv_obj_get_style_bg_color(cont, 0);
   lv_color_t mixed = lv_color_mix(lv_palette_main(LV_PALETTE_GREY),
 				  cur_bg, LV_OPA_10);
-  
-  lv_obj_set_style_bg_color(cont, mixed, 0);  
+
+  lv_obj_set_style_bg_color(cont, mixed, 0);
   lv_obj_set_style_bg_opa(cont, LV_OPA_COVER, 0);
   lv_obj_set_flex_flow(cont, LV_FLEX_FLOW_ROW);
   lv_obj_set_flex_align(cont, LV_FLEX_ALIGN_SPACE_EVENLY, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
 
   auto scale = (double)lv_disp_get_physical_hor_res(NULL) / 800.0;
 
-  
+
   lv_obj_set_size(cont, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
   lv_obj_set_style_pad_top(cont, 0, 0);
   lv_obj_set_style_pad_bottom(cont, 0, 0);
-  
+
   lv_obj_set_flex_flow(cont, LV_FLEX_FLOW_ROW);
-  
+
   lv_obj_set_style_border_width(cont, 2, 0);
   lv_obj_set_style_radius(cont, 4, 0);
-  
+
   lv_obj_add_flag(cont, LV_OBJ_FLAG_FLOATING);
   lv_obj_align(cont, LV_ALIGN_TOP_LEFT, 0, -14 * scale);
   lv_obj_add_flag(cont, LV_OBJ_FLAG_CLICKABLE);
@@ -50,7 +50,7 @@ MiniPrintStatus::MiniPrintStatus(lv_obj_t *parent,
   lv_obj_center(progress_bar);
 
   lv_img_set_size_mode(thumb, LV_IMG_SIZE_MODE_REAL);
-  
+
 }
 
 MiniPrintStatus::~MiniPrintStatus() {
@@ -92,7 +92,7 @@ void MiniPrintStatus::update_progress(int p) {
 void MiniPrintStatus::update_img(const std::string &img_path, size_t twidth) {
   auto screen_width = lv_disp_get_physical_hor_res(NULL);
   uint32_t normalized_thumb_scale = ((0.05 * (double)screen_width) / (double)twidth) * 256;
-  lv_img_set_zoom(thumb, normalized_thumb_scale);  
+  lv_img_set_zoom(thumb, normalized_thumb_scale);
   lv_img_set_src(thumb, img_path.c_str());
 }
 
@@ -105,6 +105,6 @@ void MiniPrintStatus::reset() {
   ((lv_img_t*)thumb)->src_type = LV_IMG_SRC_SYMBOL;
 
   eta = "...";
-  status = "n/a";  
+  status = "n/a";
 }
 

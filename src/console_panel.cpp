@@ -92,7 +92,7 @@ void ConsolePanel::handle_kb_input(lv_event_t *e)
     lv_keyboard_set_textarea(kb, input);
     lv_obj_clear_flag(kb, LV_OBJ_FLAG_HIDDEN);
   }
-  
+
   if(code == LV_EVENT_DEFOCUSED) {
     lv_keyboard_set_textarea(kb, NULL);
     lv_obj_add_flag(kb, LV_OBJ_FLAG_HIDDEN);
@@ -114,7 +114,7 @@ void ConsolePanel::handle_kb_input(lv_event_t *e)
 	    lv_table_set_cell_value(macro_list, index++, 0,  m.c_str());
 	  }
 	}
-	
+
 	for (const auto &m : all_macros) {
 	  if (m.rfind(upper_cmd, 0) == 0 || m.rfind(cmd, 0) == 0) {
 	    lv_table_set_cell_value(macro_list, index++, 0,  m.c_str());
@@ -125,7 +125,7 @@ void ConsolePanel::handle_kb_input(lv_event_t *e)
       }
     }
   }
-  
+
   if (code == LV_EVENT_READY) {
     spdlog::debug("keyboard ready");
     const char *cmd = lv_textarea_get_text(input);
@@ -140,7 +140,7 @@ void ConsolePanel::handle_kb_input(lv_event_t *e)
 
     if (!history.empty()) {
       const auto &front = history.front();
-      
+
       if (front != std::string(cmd)) {
 	if (history.size() >= 20) {
 	  history.pop_back();
@@ -156,7 +156,7 @@ void ConsolePanel::handle_kb_input(lv_event_t *e)
 	ws.send_jsonrpc("server.database.post_item", h);
       }
     }
-		    
+
     lv_textarea_set_text(input, "");
 
     uint32_t index = 0;
@@ -167,7 +167,7 @@ void ConsolePanel::handle_kb_input(lv_event_t *e)
     for (const auto &m : all_macros) {
       lv_table_set_cell_value(macro_list, index++, 0,  m.c_str());
     }
-    
+
   }
 }
 
@@ -181,7 +181,7 @@ void ConsolePanel::handle_select_macro(lv_event_t *e) {
     const char * macro = lv_table_get_cell_value(macro_list, row, col);
     lv_textarea_set_text(input, macro);
   }
-  
+
 }
 
 void ConsolePanel::handle_macros(json &j) {
@@ -205,7 +205,7 @@ void ConsolePanel::handle_macros(json &j) {
   for (const auto &m : history) {
     lv_table_set_cell_value(macro_list, index++, 0,  m.c_str());
   }
-  
+
   for (const auto &m : all_macros) {
     lv_table_set_cell_value(macro_list, index++, 0,  m.c_str());
   }

@@ -23,12 +23,12 @@ PromptPanel::PromptPanel(KWebSocketClient &websocket_client, std::mutex &lock, l
 //  , back_btn(promptpanel_cont, &back, "Back", &PromptPanel::_handle_callback, this)
 {
     lv_obj_set_style_pad_all(prompt_cont, 0, 0);
-    
+
     // lv_obj_clear_flag(promptpanel_cont, LV_OBJ_FLAG_SCROLLABLE);
 
     static lv_coord_t grid_main_row_dsc_detail[] = {LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
     // header, flex, buttons
-    static lv_coord_t grid_main_col_dsc_detail[] = {LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST}; 
+    static lv_coord_t grid_main_col_dsc_detail[] = {LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST};
     // single column
 
     lv_obj_center(prompt_cont);
@@ -123,7 +123,7 @@ PromptPanel::PromptPanel(KWebSocketClient &websocket_client, std::mutex &lock, l
     lv_style_init(&style_btn_dark_grey);
     lv_style_set_bg_color(&style_btn_dark_grey, lv_palette_darken(LV_PALETTE_GREY, 1));
     lv_style_set_bg_opa(&style_btn_dark_grey, LV_OPA_COVER);
-    
+
     background(); // hide ourselves
 }
 
@@ -179,7 +179,7 @@ void PromptPanel::handle_callback(lv_event_t *event) {
 void PromptPanel::check_height() {
     // check if we need to increase size of the parent container
     lv_obj_t *last_child = lv_obj_get_child(flex, -1);
-    // iterate max 5 times to enlarge, could probably be done nicer but since it's 
+    // iterate max 5 times to enlarge, could probably be done nicer but since it's
     // based on css auto sizing is terrible.
     if (NULL != last_child) {
         int count = 0;
@@ -216,7 +216,7 @@ void PromptPanel::handle_macro_response(json &j) {
             std::string command = resp.substr(10);
             spdlog::debug("action: {}", command);
 
-            
+
             if (command.find("prompt_begin") == 0) {
                 std::string prompt_header = command.substr(13);
                 spdlog::debug("PROMPT_BEGIN: {}", prompt_header);
@@ -249,7 +249,7 @@ void PromptPanel::handle_macro_response(json &j) {
                 lv_obj_set_style_border_color(textfield, lv_palette_main(LV_PALETTE_GREEN), LV_PART_MAIN | LV_STATE_DEFAULT);
                 lv_obj_set_style_bg_color(textfield, lv_palette_lighten(LV_PALETTE_GREEN, 2), LV_PART_MAIN | LV_STATE_DEFAULT);
 #endif
-            // due to using find, order IS important!  
+            // due to using find, order IS important!
             } else if (command.find("prompt_button_group_start") == 0) {
                 spdlog::debug("Button group created");
                 // create new button group in flex window and mark active
@@ -359,8 +359,8 @@ void PromptPanel::handle_macro_response(json &j) {
             } else {
                 spdlog::debug("action {} --- not supported", command);
             }
-            
+
         }
-        
+
     }
 }

@@ -39,7 +39,7 @@ class PrinterTunePanel {
   TmcTunePanel tmc_tune_panel;
   TmcStatusPanel tmc_status_panel;
   PowerPanel power_panel;
-  ButtonContainer bedmesh_btn;  
+  ButtonContainer bedmesh_btn;
   ButtonContainer finetune_btn;
   ButtonContainer inputshaper_btn;
   ButtonContainer belts_calibration_btn;
@@ -47,7 +47,7 @@ class PrinterTunePanel {
   ButtonContainer tmc_tune_btn;
   ButtonContainer tmc_status_btn;
   ButtonContainer power_devices_btn;
-  
+
 };
 
 #endif // __PRINTERTUNE_PANEL_H__

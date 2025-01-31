@@ -70,7 +70,7 @@ SensorContainer::SensorContainer(KWebSocketClient &c,
       lv_obj_add_flag(divider_label, LV_OBJ_FLAG_HIDDEN);
     }
 
-    if (can_edit) {      
+    if (can_edit) {
       lv_obj_set_style_border_width(target_label, 2, LV_PART_MAIN);
       lv_obj_set_style_radius(target_label, 6, LV_PART_MAIN);
       lv_obj_set_style_border_color(target_label, lv_palette_darken(LV_PALETTE_GREY, 1), LV_PART_MAIN);
@@ -78,7 +78,7 @@ SensorContainer::SensorContainer(KWebSocketClient &c,
       spdlog::debug("sensor cb registered name {}, cont {}, this {}, np {}",
 		    id, fmt::ptr(sensor_cont), fmt::ptr(this), fmt::ptr(&np));
       lv_obj_add_event_cb(sensor_cont, &SensorContainer::_handle_edit, LV_EVENT_CLICKED, this);
-    } 
+    }
 }
 
 SensorContainer::SensorContainer(KWebSocketClient &c,

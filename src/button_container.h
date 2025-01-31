@@ -29,7 +29,7 @@ class ButtonContainer {
 
   void handle_prompt();
   void run_callback();
-  
+
   static void _handle_callback(lv_event_t *event) {
     ButtonContainer *button_container = (ButtonContainer*)event->user_data;
     button_container->handle_callback(event);

@@ -20,8 +20,8 @@ class ImageLabel {
 	     const void* img,
 	     uint16_t img_scale,
 	     const char *v);
-   
-  
+
+
   ~ImageLabel();
 
   lv_obj_t *get_container();
@@ -31,7 +31,7 @@ class ImageLabel {
   lv_obj_t *cont;
   lv_obj_t *image;
   lv_obj_t *label;
-  
+
 };
 
 #endif // __IMAGE_LABEL_H__

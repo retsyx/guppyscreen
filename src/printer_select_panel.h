@@ -39,7 +39,7 @@ class PrinterSelectPanel {
   void add_printer(const std::string &n,
 		   const std::string &ip,
 		   uint32_t port);
-  
+
   void foreground();
 
  private:
