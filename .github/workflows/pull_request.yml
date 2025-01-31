@@ -2,7 +2,7 @@ name: validate pull request
 
 on:
   pull_request:
-    branches: [ "main", "develop" ]
+    branches: [ "main" ]
 
 jobs:
   build:
