@@ -24,10 +24,6 @@ PrintPanel::PrintPanel(KWebSocketClient &websocket, std::mutex &lock, PrintStatu
   , cancel_btn(lv_btn_create(msgbox))
   , queue_btn(lv_btn_create(msgbox))
   , left_cont(lv_obj_create(files_cont))
-  , file_table_btns(lv_obj_create(left_cont))
-  , refresh_btn(lv_btn_create(file_table_btns))
-  , modified_sort_btn(lv_btn_create(file_table_btns))
-  , az_sort_btn(lv_btn_create(file_table_btns))
   , file_table(lv_table_create(left_cont))
   , file_view(lv_obj_create(files_cont))
   , status_btn(file_view, &info_img, "Status", &PrintPanel::_handle_status_btn, this)
@@ -53,32 +49,6 @@ PrintPanel::PrintPanel(KWebSocketClient &websocket, std::mutex &lock, PrintStatu
   lv_obj_clear_flag(left_cont, LV_OBJ_FLAG_SCROLLABLE);
   lv_obj_set_flex_flow(left_cont, LV_FLEX_FLOW_COLUMN);
   lv_obj_set_style_pad_all(left_cont, 0, 0);
-
-  // file view buttons
-  lv_obj_t * label = NULL;
-
-  label = lv_label_create(refresh_btn);
-  lv_label_set_text(label, LV_SYMBOL_REFRESH " Reload");
-  lv_obj_center(label);
-
-  label = lv_label_create(modified_sort_btn);
-  lv_label_set_text(label, LV_SYMBOL_LIST " Modified");
-  lv_obj_center(label);
-
-  label = lv_label_create(az_sort_btn);
-  lv_label_set_text(label, LV_SYMBOL_LIST " A-Z");
-  lv_obj_center(label);
-
-  lv_obj_add_event_cb(refresh_btn, &PrintPanel::_handle_btns, LV_EVENT_CLICKED, this);
-  lv_obj_add_event_cb(modified_sort_btn, &PrintPanel::_handle_btns, LV_EVENT_CLICKED, this);
-  lv_obj_add_event_cb(az_sort_btn, &PrintPanel::_handle_btns, LV_EVENT_CLICKED, this);
-
-  lv_obj_set_size(file_table_btns, LV_PCT(100), LV_SIZE_CONTENT);
-  lv_obj_set_style_pad_all(file_table_btns, 2, 0);
-
-  lv_obj_clear_flag(file_table_btns, LV_OBJ_FLAG_SCROLLABLE);
-  lv_obj_set_flex_flow(file_table_btns, LV_FLEX_FLOW_ROW);
-  lv_obj_set_flex_align(file_table_btns, LV_FLEX_ALIGN_SPACE_EVENLY, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_END);
 
   lv_obj_set_size(file_table, LV_PCT(100), LV_PCT(100));
   lv_table_set_col_width(file_table, 0, LV_PCT(100));
@@ -123,6 +93,8 @@ PrintPanel::PrintPanel(KWebSocketClient &websocket, std::mutex &lock, PrintStatu
   lv_obj_add_event_cb(queue_btn, &PrintPanel::_handle_btns, LV_EVENT_CLICKED, this);
   lv_obj_align(queue_btn, LV_ALIGN_BOTTOM_LEFT, 0, 0);
 
+  lv_obj_t * label = NULL;
+
   label = lv_label_create(job_btn);
   lv_label_set_text(label, "View Job");
   lv_obj_center(label);
@@ -160,6 +132,11 @@ void PrintPanel::populate_files(json &j) {
 }
 
 void PrintPanel::consume(json &j) {
+  if (j.contains("method") && j["method"] == "notify_filelist_changed") {
+    auto action = j["/params/0/action"_json_pointer];
+    subscribe();
+    return;
+  }
   json &pstat_state = j["/params/0/print_stats/state"_json_pointer];
   if (pstat_state.is_null()) {
     return;
@@ -175,6 +152,13 @@ void PrintPanel::consume(json &j) {
 }
 
 void PrintPanel::subscribe() {
+  {
+    std::lock_guard<std::mutex> lock(lv_lock);
+    if (listing_files) {
+      return;
+    }
+    listing_files = true;
+  }
   ws.send_jsonrpc("server.files.list", R"({"root":"gcodes"})"_json, [this](json &d) {
     std::lock_guard<std::mutex> lock(lv_lock);
     std::string cur_path = cur_dir->full_path;
@@ -191,6 +175,7 @@ void PrintPanel::subscribe() {
     // need to simply this using the directory endpoint
     cur_dir = dir;
     this->populate_files(d);
+    listing_files = false;
   });
 }
 
@@ -393,16 +378,6 @@ void PrintPanel::handle_btns(lv_event_t *event) {
 	lv_obj_move_background(prompt_cont);
 	lv_obj_add_flag(prompt_cont, LV_OBJ_FLAG_HIDDEN);
       }
-    }
-
-    if (btn == refresh_btn) {
-      subscribe();
-
-    } else if (btn == modified_sort_btn) {
-      show_dir(cur_dir, SORTED_BY_MODIFIED);
-
-    } else if (btn == az_sort_btn) {
-      show_dir(cur_dir, SORTED_BY_NAME);
     }
   }
 }
