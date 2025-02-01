@@ -24,7 +24,7 @@ Guppy Screen is a touch UI for Klipper using APIs exposed by Moonraker. It build
 </p>
 
 ## Installation / Update
-Run the following interactive script via SSH on your K1/Max/CR-10 SE/Ender 3 V3 KE/Nebula Pad to install Guppy Screen.
+Run the following interactive script via SSH on your K1/Max to install Guppy Screen.
 
 #### Material Design Theme
 ```
