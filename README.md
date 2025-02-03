@@ -31,7 +31,7 @@ Run the following interactive script via SSH on your K1/Max to install Guppy Scr
 sh -c "$(wget --no-check-certificate -qO - https://raw.githubusercontent.com/retsyx/guppyscreen/main/installer.sh)"
 ```
 
-#### Z-Bolt Theme (Only for the K1/Max)
+#### Z-Bolt Theme
 ```
 sh -c "$(wget --no-check-certificate -qO - https://raw.githubusercontent.com/retsyx/guppyscreen/main/installer.sh)" -s zbolt
 ```
@@ -65,7 +65,7 @@ You can find various Guppy Screen documents [here](https://ballaswag.github.io/d
 ## Video Demo
 https://www.reddit.com/r/crealityk1/comments/17jp59g/new_touch_ui_for_the_k1/
 
-## Support the original author of Guppy Screen (ballaswag)
+## Support the Original Author of Guppy Screen (ballaswag)
 You can directly support the original project by <a href='https://ko-fi.com/ballaswag' target='_blank'><img height='36' style='border:0px;height:36px;' src='https://storage.ko-fi.com/cdn/kofi3.png?v=3' border='0' alt='Buy Me a Coffee at ko-fi.com' /></a>
 or
 [![](https://img.shields.io/static/v1?label=Sponsor&message=%E2%9D%A4&logo=GitHub&color=%23fe8e86)](https://github.com/sponsors/ballaswag)
