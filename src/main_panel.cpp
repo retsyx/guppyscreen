@@ -27,7 +27,6 @@ MainPanel::MainPanel(KWebSocketClient &websocket,
   , ws(websocket)
   , homing_panel(ws, lock)
   , fan_panel(ws, lock)
-  , led_panel(ws, lock)
   , tabview(lv_tabview_create(lv_scr_act(), LV_DIR_LEFT, 60))
   , main_tab(lv_tabview_add_tab(tabview, HOME_SYMBOL))
   , setting_tab(lv_tabview_add_tab(tabview, SETTING_SYMBOL))
@@ -44,7 +43,7 @@ MainPanel::MainPanel(KWebSocketClient &websocket,
   , homing_btn(main_cont, &move, "Homing", &MainPanel::_handle_homing_cb, this)
   , extrude_btn(main_cont, &filament_img, "Extrude", &MainPanel::_handle_extrude_cb, this)
   , action_btn(main_cont, &fan, "Fans", &MainPanel::_handle_fanpanel_cb, this)
-  , led_btn(main_cont, &light_img, "LED", &MainPanel::_handle_ledpanel_cb, this)
+  , led_btn(main_cont, &light_img, "Light", &MainPanel::_handle_ledpanel_cb, this)
   , print_btn(main_cont, &print, "Print", &MainPanel::_handle_print_cb, this)
 {
     lv_style_init(&style);
@@ -273,10 +272,6 @@ void MainPanel::create_sensors(json &temp_sensors) {
 
 void MainPanel::create_fans(json &fans) {
   fan_panel.create_fans(fans);
-}
-
-void MainPanel::create_leds(json &leds) {
-  led_panel.init(leds);
 }
 
 void MainPanel::enable_spoolman() {

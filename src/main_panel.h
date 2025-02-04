@@ -10,7 +10,6 @@
 #include "homing_panel.h"
 #include "extruder_panel.h"
 #include "fan_panel.h"
-#include "led_panel.h"
 #include "print_panel.h"
 #include "setting_panel.h"
 #include "print_status_panel.h"
@@ -36,7 +35,6 @@ class MainPanel : public NotifyConsumer {
   void create_panel();
   void create_sensors(json &temp_sensors);
   void create_fans(json &temp_fans);
-  void create_leds(json &leds);
   void handle_homing_cb(lv_event_t *event);
   void handle_extrude_cb(lv_event_t *event);
   void handle_fanpanel_cb(lv_event_t *event);
@@ -83,7 +81,6 @@ class MainPanel : public NotifyConsumer {
   KWebSocketClient &ws;
   HomingPanel homing_panel;
   FanPanel fan_panel;
-  LedPanel led_panel;
   lv_obj_t *tabview;
   lv_obj_t *main_tab;
   lv_obj_t *setting_tab;

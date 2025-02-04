@@ -90,9 +90,6 @@ void InitPanel::connected(KWebSocketClient &ws) {
 	auto display_fans = state->get_display_fans();
 	this->main_panel.create_fans(display_fans);
 
-	auto display_leds = state->get_display_leds();
-	this->main_panel.create_leds(display_leds);
-
 	// subscribe to all objects except gcode_macro
 	auto objs = d["/result/objects"_json_pointer];
 	if (!objs.is_null()) {
