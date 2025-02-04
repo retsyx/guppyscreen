@@ -2,6 +2,7 @@
 #include "state.h"
 #include "lvgl/lvgl.h"
 #include "spdlog/spdlog.h"
+#include "utils.h"
 
 #include <string>
 
@@ -160,8 +161,26 @@ void MainPanel::handle_fanpanel_cb(lv_event_t *event) {
 
 void MainPanel::handle_ledpanel_cb(lv_event_t *event) {
   if (lv_event_get_code(event) == LV_EVENT_CLICKED) {
-    spdlog::trace("clicked led panel");
-    led_panel.foreground();
+    spdlog::debug("Toggling lights");
+
+    auto state = State::get_instance();
+    // For all LEDs, get current state, and toggle it.
+    auto leds = state->get_display_leds();
+    for (auto & led : leds.items()) {
+      std::string key = led.key();
+      std::string name = KUtils::get_obj_name(key);
+      spdlog::debug("Toggling light {}", name);
+      auto led_value = state->get_data(json::json_pointer(fmt::format("/printer_state/{}/value", key)));
+      auto v = led_value.template get<double>();
+      spdlog::debug("Light value {}", v);
+      if (v == 0.0) {
+        v = 1.0;
+      } else {
+        v = 0.0;
+      }
+      spdlog::debug("New light value {}", v);
+      ws.gcode_script(fmt::format(fmt::format("SET_PIN PIN={} VALUE={}", name, v)));
+    }
   }
 }
 
