@@ -164,6 +164,7 @@ GuppyScreen *GuppyScreen::init(std::function<void(lv_color_t, lv_color_t)> hal_i
 
   lv_obj_set_size(screen_saver, LV_PCT(100), LV_PCT(100));
   lv_obj_set_style_bg_opa(screen_saver, LV_OPA_100, 0);
+  lv_obj_add_flag(screen_saver, LV_OBJ_FLAG_CLICKABLE);
   lv_obj_move_background(screen_saver);
 
   lv_obj_t *main_screen = lv_disp_get_scr_act(NULL);
